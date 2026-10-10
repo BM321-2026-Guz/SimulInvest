@@ -29,7 +29,7 @@ Terminal bilmen gerekmez.
 5. Açılan pencerede **"Create a new branch for this commit and start a pull request"** seçeneğini seç ve dal adını kurala uygun yaz.
 6. **Propose changes**, sonra **Create pull request**.
 7. PR'ın hedef (base) dalının **develop** olduğunu kontrol et.
-8. Sağ taraftan **Reviewers** kısmına Özge'yi ekle.
+8. Sağ taraftan **Reviewers** kısmına Özge'yi ekle. Özge müsait değilse Kerem'i ekle.
 
 ## Commit Mesajı Kuralı
 
@@ -73,7 +73,7 @@ Türler: `docs`, `feat`, `fix`, `test`, `ci`, `chore`
 
 - Önce takım içinde sor (WhatsApp grubu).
 - Hata ve engelleri Scrum Master'a (Kerem) bildir.
-- Kod ve mimari sorular için Özge'ye PR üzerinden yorum bırak.
+- Kod ve mimari sorular için Özge'ye (müsait değilse Kerem'e) PR üzerinden yorum bırak.
 
 ## Yapılmaması Gerekenler
 
