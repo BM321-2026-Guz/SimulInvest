@@ -147,3 +147,25 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+# --- Python ---
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# Test ve kapsam
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Veritabanı (SQLite)
+*.db
+*.sqlite3
+
+# Editör ve işletim sistemi
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
