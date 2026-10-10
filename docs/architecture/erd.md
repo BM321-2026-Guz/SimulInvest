@@ -1,10 +1,10 @@
-# SimulInvest - Veritabanı Tasarımı (ERD)
+# Veritabanı Tasarımı (ERD)
 
 ```mermaid
 erDiagram
     USERS ||--|| WALLETS : "sahiptir"
-    USERS ||--0{ HOLDINGS : "tutar"
-    USERS ||--0{ TRANSACTIONS : "yapar"
+    USERS ||--o{ HOLDINGS : "tutar"
+    USERS ||--o{ TRANSACTIONS : "yapar"
     NEWS ||--o| NEWS_ANALYSIS : "sahiptir"
 
     USERS {
@@ -25,8 +25,8 @@ erDiagram
         int user_id FK
         string asset_type
         string symbol
-        decimal amount
-        decimal average_price
+        decimal quantity
+        decimal average_cost
     }
 
     TRANSACTIONS {
@@ -34,7 +34,7 @@ erDiagram
         int user_id FK
         string transaction_type
         string symbol
-        decimal amount
+        decimal quantity
         decimal price
         datetime timestamp
     }
@@ -50,5 +50,5 @@ erDiagram
     NEWS_ANALYSIS {
         int id PK
         int news_id FK
-        string ai_badge
+        string sentiment
     }
