@@ -16,7 +16,7 @@
 ## Docker planı
 - Projeyi tek komutla (`docker-compose up`) ayağa kaldıracak yapı kurulacak.
 - Backend için bir Dockerfile, servisleri birleştirmek için docker-compose.yml yazılacak.
-- 14. haftadaki demoda proje bu şekilde çalıştırılacak.
+- Final demosunda (14. hafta) proje bu şekilde çalıştırılacak.
 
 ## Gizli bilgi yönetimi
 - API anahtarları ve şifreler `.env` dosyasında tutulacak.
