@@ -1,0 +1,399 @@
+openapi: 3.0.3
+info:
+  title: SimulInvest API
+  version: 1.1.0
+  description: >
+    Yapay zeka destekli sanal borsa ve portföy simülasyonu API sözleşmesi.
+    Tüm parasal değerler TL cinsindendir (karar: tek TL cüzdan).
+    Sözleşme API-First yaklaşımıyla yazılmıştır; frontend ve backend bu
+    dosyaya göre geliştirilir.
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8000
+    description: Yerel geliştirme
+
+tags:
+  - name: Auth
+    description: Kayıt ve giriş
+  - name: Portfolio
+    description: Cüzdan ve portföy
+  - name: Market
+    description: Güncel fiyatlar
+  - name: Trade
+    description: Al-sat işlemleri
+  - name: News
+    description: Haberler ve YZ duygu analizi (P1)
+
+paths:
+  /api/auth/register:
+    post:
+      tags: [Auth]
+      summary: Yeni kullanıcı kaydı. Kullanıcıya otomatik 100.000 TL bakiye tanımlanır.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Kayıt başarılı.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: E-posta zaten kayıtlı.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Giriş yapar ve JWT döner.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Giriş başarılı.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/portfolio:
+    get:
+      tags: [Portfolio]
+      summary: Kullanıcının güncel portföy durumunu ve sanal bakiyesini getirir.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Başarılı işlem.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/assets:
+    get:
+      tags: [Market]
+      summary: Desteklenen varlıkların güncel fiyat listesi.
+      parameters:
+        - name: type
+          in: query
+          required: false
+          description: Varlık türüne göre filtre.
+          schema:
+            $ref: '#/components/schemas/AssetType'
+      responses:
+        '200':
+          description: Varlık listesi.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+
+  /api/assets/{symbol}:
+    get:
+      tags: [Market]
+      summary: Tek bir varlığın güncel fiyatı.
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          schema:
+            type: string
+            example: THYAO
+      responses:
+        '200':
+          description: Varlık bilgisi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/trades:
+    post:
+      tags: [Trade]
+      summary: Alım veya satım emri verir. Emir anlık fiyattan işlenir.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TradeRequest'
+      responses:
+        '201':
+          description: İşlem gerçekleşti.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: >
+            Geçersiz istek veya yetersiz bakiye / yetersiz varlık adedi.
+            Bakiye hiçbir koşulda eksiye düşemez.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/transactions:
+    get:
+      tags: [Trade]
+      summary: Kullanıcının işlem geçmişi (en yeni önce).
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: İşlem listesi.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/news:
+    get:
+      tags: [News]
+      summary: Finans haberleri ve YZ duygu etiketi (P1).
+      responses:
+        '200':
+          description: Haber listesi.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsItem'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: Geçersiz istek.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Kimlik doğrulama gerekli veya token geçersiz.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Kaynak bulunamadı.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    AssetType:
+      type: string
+      enum: [STOCK, CRYPTO, GOLD]
+
+    RegisterRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          example: ogrenci@example.com
+        password:
+          type: string
+          minLength: 8
+          format: password
+        displayName:
+          type: string
+          example: Ayşe
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT erişim token'ı.
+        expiresIn:
+          type: integer
+          description: Geçerlilik süresi (saniye).
+          example: 3600
+
+    Asset:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: THYAO
+        name:
+          type: string
+          example: Türk Hava Yolları
+        type:
+          $ref: '#/components/schemas/AssetType'
+        price:
+          type: number
+          description: Güncel fiyat (TL).
+          example: 312.50
+        updatedAt:
+          type: string
+          format: date-time
+
+    Holding:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: THYAO
+        type:
+          $ref: '#/components/schemas/AssetType'
+        quantity:
+          type: number
+          example: 10
+        averageCost:
+          type: number
+          description: Ortalama alış maliyeti (TL).
+          example: 300.00
+        currentPrice:
+          type: number
+          example: 312.50
+        profitLoss:
+          type: number
+          description: Kâr/zarar tutarı (TL).
+          example: 125.00
+
+    Portfolio:
+      type: object
+      properties:
+        balance:
+          type: number
+          description: Nakit bakiye (TL).
+          example: 97000.00
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Holding'
+        totalValue:
+          type: number
+          description: Nakit + varlıkların güncel toplam değeri (TL).
+          example: 100125.00
+        totalProfitLoss:
+          type: number
+          description: Başlangıç bakiyesine göre toplam kâr/zarar (TL).
+          example: 125.00
+
+    TradeRequest:
+      type: object
+      required: [symbol, side, quantity]
+      properties:
+        symbol:
+          type: string
+          example: THYAO
+        side:
+          type: string
+          enum: [BUY, SELL]
+        quantity:
+          type: number
+          minimum: 0
+          exclusiveMinimum: true
+          example: 10
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        symbol:
+          type: string
+          example: THYAO
+        side:
+          type: string
+          enum: [BUY, SELL]
+        quantity:
+          type: number
+          example: 10
+        price:
+          type: number
+          description: İşlem anındaki birim fiyat (TL).
+          example: 312.50
+        total:
+          type: number
+          description: Toplam tutar (TL).
+          example: 3125.00
+        createdAt:
+          type: string
+          format: date-time
+
+    NewsItem:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        source:
+          type: string
+        url:
+          type: string
+          format: uri
+        publishedAt:
+          type: string
+          format: date-time
+        sentiment:
+          type: string
+          enum: [YUKSELIS, DUSUS]
+          description: YZ tarafından üretilen duygu etiketi.
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: INSUFFICIENT_BALANCE
+        message:
+          type: string
+          example: Yetersiz bakiye.
