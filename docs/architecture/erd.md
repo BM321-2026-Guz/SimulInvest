@@ -32,11 +32,13 @@ erDiagram
     TRANSACTIONS {
         int id PK
         int user_id FK
-        string transaction_type
+        string transaction_side
         string symbol
         decimal quantity
         decimal price
         datetime timestamp
+        string side "BUY veya SELL"
+        decimal total "quantity x price"
     }
 
     NEWS {
@@ -45,6 +47,7 @@ erDiagram
         text content
         string source
         datetime published_at
+        string url "haber bağlantısı"
     }
 
     NEWS_ANALYSIS {
@@ -59,5 +62,6 @@ erDiagram
 - **Hassas Veri Tipi (Decimal):** Bakiye, varlık miktarları (`quantity`) ve birim fiyatlar (`price`, `average_cost`) finansal hesaplama hatalarını önlemek adına tam sayı yerine `decimal` veri tipinde tanımlanmıştır.
 - **Duygu Analizi (Sentiment):** Haber duygu analizi sonuçları (`NEWS_ANALYSIS`), haber metninden bağımsız olarak bire bir ilişkili ayrı bir tabloda `sentiment` alanıyla saklanır.
 - **Veri Güvenliği:** Kullanıcı parolaları veritabanında asla düz metin (plain text) olarak saklanmaz, `password_hash` ile hash'lenerek tutulur.
-- **İşlem Geçmişinin Değişmezliği:** `TRANSACTIONS` tablosu, varlık fiyatı veya cüzdan bakiyesi değişse bile geçmiş işlemlerin değişmezliğini (immutability) korumak adına işlem anındaki fiyatı (`price`) ve miktarı kaydeder.
+- **İşlem Geçmişinin Değişmezliği:** `TRANSACTIONS` tablosu, varlık fiyatı veya cüzdan bakiyesi değişse bile geçmiş işlemlerin değişmezliğini (immutability) korumak adına işlem anındaki fiyatı (`price`), miktarı (`quantity`), işlem yönünü (`side`) ve toplam işlem tutarını (`total`) kaydeder. `total`, `quantity × price` olarak hesaplanır.
 - **OpenAPI Uyumluluğu:** Tüm alan isimleri ve veri tipleri projenin `docs/openapi.yaml` spesifikasyonu ile büyük ölçüde uyumludur (`TRANSACTIONS` tablosundaki `side` alanı OpenAPI spesifikasyonuna göre güncellenmiştir).
+- **Haber Kaynağı:** `NEWS` tablosundaki `url` alanı, haberin orijinal bağlantısını saklayarak kullanıcının haberin kaynağına erişmesini sağlar.
