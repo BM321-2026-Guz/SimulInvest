@@ -21,6 +21,10 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements-dev.txt
 
+      # Sadece bu çalıştırmaya özel rastgele test anahtarı; repoda hiçbir yerde sabit değer yok.
+      - name: Test için JWT_SECRET üret
+        run: echo "JWT_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+
       - name: Bağımlılıkları kur
         run: pip install -r requirements-dev.txt
 

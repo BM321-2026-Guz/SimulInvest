@@ -8,8 +8,13 @@ FastAPI + SQLAlchemy + SQLite. API sözleşmesi: [`docs/openapi.yaml`](../docs/o
 cd backend
 py -3.13 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-copy .env.example .env   # JWT_SECRET'ı değiştir
+copy .env.example .env
+.\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_hex(32))"
 ```
+
+Son komutun çıktısını `.env` içindeki `JWT_SECRET=` satırına yapıştır. `JWT_SECRET` zorunludur
+ve varsayılanı yoktur: tanımlı değilse veya 32 karakterden kısaysa uygulama (ve testler) başlamaz.
+`.env` dosyası `.gitignore`'da, asla commit etme.
 
 macOS / Linux: `python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements-dev.txt`
 
