@@ -34,6 +34,7 @@ Gerçek banka/kredi kartı entegrasyonu, limit/stop-loss emirleri ve WebSocket i
 | Özge Karaca | Lead Software Architect & Tech Lead |
 | Mine Yamaner | QA & Test Automation Engineer |
 | Eren Özdemir | DevOps & CI/CD Engineer |
+| Emre Harman | Security Specialist (DevSecOps) |
 
 ## Dokümantasyon
 
@@ -42,7 +43,13 @@ Gerçek banka/kredi kartı entegrasyonu, limit/stop-loss emirleri ve WebSocket i
 
 ## Teknoloji Yığını
 
-Henüz kesinleşmedi. Karar verildiğinde burada güncellenecek.
+- Backend: Python + FastAPI
+- Veritabanı: SQLite (SQLAlchemy)
+- Frontend: HTML, CSS, JavaScript (Chart.js)
+- Test: pytest, pytest-cov (hedef en az %50)
+- CI/CD ve güvenlik: GitHub Actions, CodeQL
+- Konteyner: Docker, docker-compose
+- Statik analiz: SonarQube (final raporu)
 
 ## Kurulum ve Çalıştırma
 
