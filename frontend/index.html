@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SimulInvest</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Giriş / kayıt -->
+  <section id="auth-view" class="auth" hidden>
+    <div class="card auth-card">
+      <h1 class="logo">Simul<span>Invest</span></h1>
+      <p class="muted">100.000 TL sanal bakiyeyle risksiz yatırım simülasyonu</p>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-mode="login" type="button">Giriş yap</button>
+        <button class="tab" data-mode="register" type="button">Kayıt ol</button>
+      </div>
+
+      <form id="auth-form">
+        <label id="name-field" hidden>Ad (isteğe bağlı)
+          <input name="displayName" autocomplete="name" maxlength="100">
+        </label>
+        <label>E-posta
+          <input name="email" type="email" required autocomplete="email">
+        </label>
+        <label>Şifre
+          <input name="password" type="password" required minlength="8" autocomplete="current-password">
+        </label>
+        <p id="auth-error" class="error" hidden></p>
+        <button class="btn primary" type="submit" id="auth-submit">Giriş yap</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Uygulama -->
+  <div id="app-view" hidden>
+    <header class="topbar">
+      <h1 class="logo">Simul<span>Invest</span></h1>
+      <div class="topbar-right">
+        <span id="user-email" class="muted"></span>
+        <button id="logout" class="btn ghost" type="button">Çıkış</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="stats">
+        <div class="card stat"><span class="muted">Nakit</span><strong id="stat-balance">—</strong></div>
+        <div class="card stat"><span class="muted">Toplam değer</span><strong id="stat-total">—</strong></div>
+        <div class="card stat"><span class="muted">Toplam kâr / zarar</span><strong id="stat-pnl">—</strong></div>
+      </section>
+
+      <section class="card market">
+        <div class="card-head">
+          <h2>Piyasa</h2>
+          <div class="tabs small" id="market-filter">
+            <button class="tab active" data-type="" type="button">Tümü</button>
+            <button class="tab" data-type="STOCK" type="button">Hisse</button>
+            <button class="tab" data-type="CRYPTO" type="button">Kripto</button>
+            <button class="tab" data-type="GOLD" type="button">Altın</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Sembol</th><th>Ad</th><th class="num">Fiyat</th></tr></thead>
+            <tbody id="market-body"></tbody>
+          </table>
+        </div>
+        <p class="muted small-text" id="market-updated"></p>
+      </section>
+
+      <section class="card trade">
+        <h2>Al / Sat</h2>
+        <form id="trade-form">
+          <label>Varlık
+            <select name="symbol" id="trade-symbol" required></select>
+          </label>
+          <div class="side-toggle">
+            <input type="radio" name="side" id="side-buy" value="BUY" checked>
+            <label for="side-buy">Al</label>
+            <input type="radio" name="side" id="side-sell" value="SELL">
+            <label for="side-sell">Sat</label>
+          </div>
+          <label>Miktar
+            <input name="quantity" id="trade-qty" type="number" min="0" step="any" required>
+          </label>
+          <p class="muted" id="trade-hint"></p>
+          <p class="estimate">Tahmini tutar: <strong id="trade-estimate">—</strong></p>
+          <p id="trade-msg" class="msg" hidden></p>
+          <button class="btn primary" type="submit" id="trade-submit">Emri gönder</button>
+        </form>
+      </section>
+
+      <section class="card holdings">
+        <h2>Portföyüm</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Sembol</th><th class="num">Adet</th><th class="num">Ort. maliyet</th>
+                  <th class="num">Güncel</th><th class="num">K / Z</th></tr>
+            </thead>
+            <tbody id="holdings-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card history">
+        <h2>İşlem geçmişi</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Tarih</th><th>Sembol</th><th>Yön</th><th class="num">Adet</th>
+                  <th class="num">Fiyat</th><th class="num">Tutar</th></tr>
+            </thead>
+            <tbody id="history-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer muted">Bu bir simülasyondur, yatırım tavsiyesi değildir.</footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
