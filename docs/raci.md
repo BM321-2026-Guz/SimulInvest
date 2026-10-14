@@ -28,8 +28,8 @@ Bir kişi hem işi yapıp hem hesap veriyorsa **A/R** yazılır.
 | Teknoloji yığını kararı | I | C | A/R | C | C | I |
 | OpenAPI sözleşmesi | C | C | A/R | C | I | I |
 | ERD, C4 ve UML diyagramları | I | C | A/R | I | I | I |
-| Backend geliştirme (API, cüzdan, al-sat) | I | C | A/R | C | C | I |
-| Fiyat verisi entegrasyonu ve önbellek | I | C | A | I | R | I |
+| Backend geliştirme (API, cüzdan, al-sat) | I | C | C | C | A/R | I |
+| Fiyat verisi entegrasyonu ve önbellek | I | C | C | I | A/R | I |
 | Frontend geliştirme | C | A/R | C | I | I | I |
 | Pull Request incelemeleri | I | R (yedek) | A/R | I | I | I |
 | Test stratejisi, birim ve E2E testler | I | I | C | A/R | C | I |
