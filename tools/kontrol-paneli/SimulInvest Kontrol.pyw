@@ -73,24 +73,56 @@ def python_launcher():
     return [sys.executable]
 
 
+def parse_netstat_listeners(output, port):
+    """`netstat -ano` çıktısından portu dinleyen PID'leri çıkarır.
+
+    Durum sütununa ("LISTENING") bakılmaz: Windows'un bazı dil paketleri onu çeviriyor
+    (Almanca "ABHÖREN" gibi). Dinleyen soketin karşı adresi her dilde 0.0.0.0:0 veya [::]:0'dır.
+    """
+    pids = set()
+    for line in output.splitlines():
+        parts = line.split()
+        if (len(parts) >= 5 and parts[0].upper() == "TCP"
+                and parts[1].endswith(f":{port}") and parts[2] in ("0.0.0.0:0", "[::]:0")
+                and parts[-1].isdigit() and parts[-1] != "0"):
+            pids.add(int(parts[-1]))
+    return pids
+
+
 def pids_listening_on(port):
     """Verilen portu dinleyen süreçlerin PID'lerini bulur."""
     try:
         if IS_WIN:
-            out = subprocess.run(["netstat", "-ano", "-p", "TCP"], capture_output=True, text=True,
-                                 timeout=10, **POPEN_KW).stdout
-            pids = set()
-            for line in out.splitlines():
-                parts = line.split()
-                if (len(parts) >= 5 and parts[3].upper() == "LISTENING"
-                        and parts[1].endswith(f":{port}") and parts[4].isdigit() and parts[4] != "0"):
-                    pids.add(int(parts[4]))
-            return pids
+            out = subprocess.run(["netstat", "-ano"], capture_output=True, text=True,
+                                 errors="replace", timeout=10, **POPEN_KW).stdout
+            return parse_netstat_listeners(out, port)
         out = subprocess.run(["lsof", "-nP", f"-iTCP:{port}", "-sTCP:LISTEN", "-t"],
                              capture_output=True, text=True, timeout=10).stdout
         return {int(p) for p in out.split() if p.isdigit()}
     except Exception:
         return set()
+
+
+def process_command_line(pid):
+    """Sürecin komut satırı; bulunamazsa boş metin."""
+    try:
+        if IS_WIN:
+            out = subprocess.run(
+                ["powershell", "-NoProfile", "-Command",
+                 f"(Get-CimInstance Win32_Process -Filter 'ProcessId={int(pid)}').CommandLine"],
+                capture_output=True, text=True, errors="replace", timeout=15, **POPEN_KW).stdout
+        else:
+            out = subprocess.run(["ps", "-o", "command=", "-p", str(int(pid))],
+                                 capture_output=True, text=True, timeout=10).stdout
+        return out.strip()
+    except Exception:
+        return ""
+
+
+def is_simulinvest_process(command_line):
+    """Komut satırı bu panelin (veya .bat başlatıcısının) açtığı sunuculardan birine mi ait?"""
+    cmd = command_line.replace("\\", "/").lower()
+    return ("uvicorn" in cmd and "app.main:app" in cmd) or "http.server" in cmd
 
 
 def _descendants(pid):
@@ -150,12 +182,33 @@ def python_missing_hint():
     return "Python 3.13 bulunamadı. python.org'dan kur veya: brew install python@3.13"
 
 
+def find_repo_root(start=APP_DIR):
+    """Panel SimulInvest reposunun içindeyse (tools/kontrol-paneli) repo kökünü bulur.
+
+    `.git` worktree'lerde klasör değil dosyadır; ikisi de kabul edilir.
+    """
+    for folder in (start, *start.parents):
+        if (folder / ".git").exists() and (folder / "docs" / "openapi.yaml").exists():
+            return folder
+    return None
+
+
+REPO_ROOT = find_repo_root()
+
+
 def guess_folder(name):
-    """Repo klasörünü bu uygulamanın yanında veya Belgeler\\GitHub altında arar."""
-    for base in (APP_DIR.parent, Path.home() / "Documents" / "GitHub"):
+    """Klasörü repo kökünün yanında, panelin yanında veya Belgeler\\GitHub altında arar."""
+    bases = [APP_DIR.parent, Path.home() / "Documents" / "GitHub"]
+    if REPO_ROOT:
+        bases.insert(0, REPO_ROOT.parent)
+    for base in bases:
         if (base / name).is_dir():
             return str(base / name)
     return ""
+
+
+def repo_has_frontend(repo):
+    return bool(repo) and (Path(repo) / "frontend" / "index.html").exists()
 
 
 def load_config():
@@ -165,8 +218,9 @@ def load_config():
     except (OSError, ValueError):
         pass
     if not cfg["repo"]:
-        cfg["repo"] = guess_folder("SimulInvest")
-    if not cfg["ui_repo"]:
+        cfg["repo"] = str(REPO_ROOT) if REPO_ROOT else guess_folder("SimulInvest")
+    # Arayüz develop'a birleşene kadar ayrı bir klasörde (worktree) duruyor; sonra gerekmez.
+    if not cfg["ui_repo"] and not repo_has_frontend(cfg["repo"]):
         cfg["ui_repo"] = guess_folder("SimulInvest-ui")
     return cfg
 
@@ -267,18 +321,24 @@ class App(tk.Tk):
         paths.pack(fill="x")
         paths.columnconfigure(1, weight=1)
         self.vars = {}
+        self.path_widgets = {}
         rows = [
             ("repo", "SimulInvest repo klasörü", "dir"),
             ("ui_repo", "Arayüz (UI) repo klasörü", "dir"),
             ("python", "Python (.venv) — boş = otomatik", "file"),
         ]
         for i, (key, label, kind) in enumerate(rows):
-            ttk.Label(paths, text=label).grid(row=i, column=0, sticky="w", padx=(0, 8), pady=2)
+            lbl = ttk.Label(paths, text=label)
+            lbl.grid(row=i, column=0, sticky="w", padx=(0, 8), pady=2)
             var = tk.StringVar(value=self.cfg.get(key, ""))
             self.vars[key] = var
-            ttk.Entry(paths, textvariable=var).grid(row=i, column=1, sticky="ew", pady=2)
-            ttk.Button(paths, text="Seç…", command=lambda k=key, t=kind: self._browse(k, t)).grid(
-                row=i, column=2, padx=(6, 0), pady=2)
+            entry = ttk.Entry(paths, textvariable=var)
+            entry.grid(row=i, column=1, sticky="ew", pady=2)
+            btn = ttk.Button(paths, text="Seç…", command=lambda k=key, t=kind: self._browse(k, t))
+            btn.grid(row=i, column=2, padx=(6, 0), pady=2)
+            self.path_widgets[key] = (lbl, entry, btn)
+        self.vars["repo"].trace_add("write", lambda *_: self._update_ui_repo_row())
+        self._update_ui_repo_row()
 
         opts = ttk.Frame(paths)
         opts.grid(row=len(rows), column=0, columnspan=3, sticky="w", pady=(6, 0))
@@ -343,6 +403,18 @@ class App(tk.Tk):
                            ("error", "#f48771"), ("time", "#808080")]:
             self.log_text.tag_configure(tag, foreground=color)
         self.all_lines = []  # (zaman, kaynak, metin) — filtre için
+
+    def _update_ui_repo_row(self):
+        """Arayüz repo içinde varsa (develop'a birleşmişse) ayrı UI klasörü ayarı gerekmez."""
+        lbl, entry, btn = self.path_widgets["ui_repo"]
+        if repo_has_frontend(self.vars["repo"].get().strip()):
+            lbl.configure(text="Arayüz (UI) klasörü — gerekmiyor")
+            entry.configure(state="disabled")
+            btn.configure(state="disabled")
+        else:
+            lbl.configure(text="Arayüz (UI) repo klasörü")
+            entry.configure(state="normal")
+            btn.configure(state="normal")
 
     def _browse(self, key, kind):
         current = self.vars[key].get()
@@ -598,18 +670,45 @@ class App(tk.Tk):
         self._step("SimulInvest kapatılıyor…")
         self.backend.stop()
         self.frontend.stop()
-        # Panel dışından (ör. .bat ile) açılmış olanlar için portları da temizle.
+        # Panel dışından (ör. .bat ile) açılmış SimulInvest sunucuları için portları da temizle.
+        # Portu başka bir program kullanıyorsa (başka bir proje gibi) sormadan kapatılmaz.
         for port in (self.cfg["backend_port"], self.cfg["frontend_port"]):
             pids = pids_listening_on(port)
+            if not pids:
+                self.log(f"Port {port} zaten kapalı.")
+                continue
             for pid in pids:
-                kill_tree(pid)
-            self.log(f"Port {port} {'kapatıldı' if pids else 'zaten kapalı'}.")
+                cmd = process_command_line(pid)
+                if is_simulinvest_process(cmd):
+                    kill_tree(pid)
+                    self.log(f"Port {port} kapatıldı (PID {pid}).")
+                elif self._ask(f"Port {port} SimulInvest olmayan bir program tarafından kullanılıyor:\n\n"
+                               f"PID {pid}: {cmd or 'komut satırı okunamadı'}\n\n"
+                               "Bu program kapatılsın mı?"):
+                    kill_tree(pid)
+                    self.log(f"Port {port}: başka program kapatıldı (PID {pid}).")
+                else:
+                    self.log(f"Port {port}: başka bir program kullanıyor (PID {pid}), dokunulmadı.")
         if IS_WIN:
             # Eski .bat başlatıcısının açtığı konsol pencereleri.
             for title in ("SimulInvest Backend*", "SimulInvest Arayuz*"):
                 subprocess.run(["taskkill", "/FI", f"WINDOWTITLE eq {title}", "/T", "/F"],
                                capture_output=True, **POPEN_KW)
         self._step("Durduruldu.")
+
+    def _ask(self, question):
+        """Evet/hayır sorusu; arka plan thread'inden çağrılırsa ana thread'de sorup cevabı bekler."""
+        if threading.current_thread() is threading.main_thread():
+            return messagebox.askyesno("SimulInvest", question, icon="warning")
+        answer, done = [False], threading.Event()
+
+        def ask():
+            answer[0] = messagebox.askyesno("SimulInvest", question, icon="warning")
+            done.set()
+
+        self.after(0, ask)
+        done.wait()
+        return answer[0]
 
     # ---------- diğer ----------
     def _open_ui(self):
