@@ -14,6 +14,7 @@ const $ = (sel) => document.querySelector(sel);
 const tl = new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" });
 const qtyFmt = new Intl.NumberFormat("tr-TR", { maximumFractionDigits: 8 });
 const dateFmt = new Intl.DateTimeFormat("tr-TR", { dateStyle: "short", timeStyle: "short" });
+const timeFmt = new Intl.DateTimeFormat("tr-TR", { timeStyle: "medium" }); // saniyeli
 
 const state = { assets: [], authMode: "login", portfolio: null };
 
@@ -124,7 +125,7 @@ async function loadAssets() {
     renderMarket();
     renderSymbolOptions();
     const latest = state.assets.map((a) => new Date(a.updatedAt)).sort((a, b) => b - a)[0];
-    $("#market-updated").textContent = latest ? `Son güncelleme: ${dateFmt.format(latest)}` : "";
+    $("#market-updated").textContent = latest ? `Son güncelleme: ${timeFmt.format(latest)}` : "";
   } catch (err) {
     $("#market-groups").innerHTML = `<div class="card empty">${escapeHtml(err.message)}</div>`;
   }
@@ -369,13 +370,18 @@ $("#market-groups").addEventListener("click", (e) => {
   $("#trade-qty").focus();
 });
 
-// Fiyatlar backend'de 60 sn önbellekte; 30 sn'de bir yenilemek yeterli.
-setInterval(() => {
-  if (!$("#app-view").hidden) {
-    loadAssets();
-    loadPortfolio().catch(() => {});
-  }
-}, 30000);
+// Backend fiyatları arka planda 10 sn'de bir yeniliyor; 5 sn'de bir sormak en fazla ~15 sn gecikme
+// demek. Sekme görünmezken sorulmaz, geri dönülünce hemen yenilenir.
+const REFRESH_MS = 5000;
+
+function refreshPrices() {
+  if ($("#app-view").hidden || document.hidden) return;
+  loadAssets();
+  loadPortfolio().catch(() => {});
+}
+
+setInterval(refreshPrices, REFRESH_MS);
+document.addEventListener("visibilitychange", refreshPrices);
 
 if (storage("get", TOKEN_KEY)) showApp();
 else logout();
