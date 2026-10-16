@@ -7,6 +7,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.database import Base, get_db, make_engine
 from app.main import app
+from app.services.login_limiter import LoginRateLimiter, get_login_limiter
 from app.services.price_service import PriceService, get_price_service
 
 
@@ -39,8 +40,29 @@ def price_service(fake_prices):
     return PriceService(fake_prices, cache_seconds=0)
 
 
+class FakeClock:
+    """Testte zamanı elle ilerletmek için sahte saat."""
+
+    def __init__(self):
+        self.now = 1000.0
+
+    def __call__(self) -> float:
+        return self.now
+
+
 @pytest.fixture
-def client(db_session_factory, price_service):
+def clock():
+    return FakeClock()
+
+
+@pytest.fixture
+def login_limiter(clock):
+    # Her test kendi sayacıyla başlar; sınırlar varsayılan ayarlarla aynı.
+    return LoginRateLimiter(max_per_account=5, max_per_ip=20, window_seconds=900, clock=clock)
+
+
+@pytest.fixture
+def client(db_session_factory, price_service, login_limiter):
     def _get_db():
         db = db_session_factory()
         try:
@@ -50,6 +72,7 @@ def client(db_session_factory, price_service):
 
     app.dependency_overrides[get_db] = _get_db
     app.dependency_overrides[get_price_service] = lambda: price_service
+    app.dependency_overrides[get_login_limiter] = lambda: login_limiter
     yield TestClient(app)
     app.dependency_overrides.clear()
 

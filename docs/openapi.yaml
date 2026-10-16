@@ -56,6 +56,9 @@ paths:
     post:
       tags: [Auth]
       summary: Giriş yapar ve JWT döner.
+      description: >
+        Aynı IP'den aynı e-postaya 15 dakikada 5, bir IP'den toplam 20 hatalı denemeden sonra
+        istekler 429 ile reddedilir (doğru şifreyle bile). Başarılı giriş o e-postanın sayacını sıfırlar.
       requestBody:
         required: true
         content:
@@ -71,6 +74,17 @@ paths:
                 $ref: '#/components/schemas/AuthResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '429':
+          description: Çok fazla hatalı giriş denemesi.
+          headers:
+            Retry-After:
+              description: Tekrar denemeden önce beklenecek süre (saniye).
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /api/portfolio:
     get:

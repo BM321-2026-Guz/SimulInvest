@@ -65,3 +65,7 @@ CI (`.github/workflows/backend-ci.yml`) her PR'da ruff, pytest ve en az %50 kaps
   `/api/assets` yanıtında `isFallback: true` ile işaretlenir; son bilinen gerçek fiyatta bu alan
   `false` kalır ve fiyatın ne kadar eski olduğu `updatedAt` alanından anlaşılır.
 - Fiyat kaynakları: BIST ve altın için Yahoo Finance, kripto için CoinGecko (anahtarsız uç noktalar).
+- Login deneme sınırı: aynı IP'den aynı e-postaya 15 dakikada 5, bir IP'den toplam 20 hatalı
+  deneme sonrası `429 TOO_MANY_ATTEMPTS` ve `Retry-After` başlığı döner. Sayaçlar bellekte
+  tutulur, uygulama yeniden başlayınca sıfırlanır. Sınırlar `.env` ile değiştirilebilir:
+  `LOGIN_MAX_ATTEMPTS`, `LOGIN_MAX_ATTEMPTS_PER_IP`, `LOGIN_WINDOW_SECONDS`.
