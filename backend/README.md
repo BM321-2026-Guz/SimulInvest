@@ -60,7 +60,10 @@ CI (`.github/workflows/backend-ci.yml`) her PR'da ruff, pytest ve en az %50 kaps
 - Al-sat tek DB transaction'ında yapılır. SQLite `BEGIN IMMEDIATE` ile başlatıldığı için eşzamanlı
   iki emir bakiyeyi aynı anda okuyamaz; ayrıca DB'de `balance >= 0` kısıtı vardır.
 - Hisse adedi tam sayı olmalıdır; kripto ve altında 8 ondalığa kadar izin verilir.
-- Fiyatlar 60 sn önbellekte tutulur. Kaynak hata verirse son bilinen, o da yoksa
+- Fiyatlar arka planda 10 sn'de bir yenilenir (`PRICE_CACHE_SECONDS`); istekler dış API'yi hiç beklemez,
+  önbellekten okur. Yahoo'daki 12 sembol tek toplu istekle alınır. CoinGecko verisi zaten ~10-20 sn'de
+  bir güncellendiği ve ücretsiz sınır dakikada ~30 istek olduğu için daha kısa aralık önerilmez.
+  BIST fiyatları Yahoo'da ~15 dk gecikmelidir. Kaynak hata verirse son bilinen, o da yoksa
   `asset_catalog.py` içindeki demo fiyat kullanılır. Demo fiyat kullanılan varlıklar
   `/api/assets` yanıtında `isFallback: true` ile işaretlenir; son bilinen gerçek fiyatta bu alan
   `false` kalır ve fiyatın ne kadar eski olduğu `updatedAt` alanından anlaşılır.

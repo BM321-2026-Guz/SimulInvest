@@ -1,5 +1,7 @@
 """Fiyat önbelleği (Story 1.3).
 
+- Uygulama çalışırken fiyatlar arka planda `cache_seconds` saniyede bir yenilenir (`start()`);
+  istekler dış API'yi beklemez. Arka plan çalışmıyorsa (testler) istek anında yenilenir.
 - Fiyatlar en fazla `cache_seconds` saniye eskidir.
 - Dış kaynak hata verirse son bilinen fiyat, o da yoksa katalogdaki yedek fiyat kullanılır;
   uygulama hiçbir koşulda fiyat yüzünden çökmez.
@@ -38,27 +40,63 @@ class PriceService:
         self._cache_seconds = cache_seconds
         self._lock = threading.Lock()
         self._fetched_at: float | None = None
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
         now = datetime.now(UTC)
         self._quotes: dict[str, Quote] = {
             a.symbol: Quote(a, a.fallback_price, now, is_fallback=True) for a in ASSETS
         }
 
+    def _refresh(self) -> None:
+        """Dış kaynaktan fiyatları çeker. Çağıran `self._lock`'u tutmalı."""
+        try:
+            fresh = self._fetcher()
+        except Exception as exc:
+            log.warning("Fiyatlar yenilenemedi, eski/yedek fiyatlar kullanılıyor: %s", exc)
+            fresh = {}
+        now = datetime.now(UTC)
+        for symbol, price in fresh.items():
+            asset = ASSETS_BY_SYMBOL.get(symbol)
+            if asset and price > 0:
+                rounded = price.quantize(PRICE_STEP, rounding=ROUND_HALF_UP)
+                self._quotes[symbol] = Quote(asset, rounded, now)
+        self._fetched_at = time.monotonic()
+
     def _refresh_if_stale(self) -> None:
+        # Arka plan yenilemesi çalışıyorsa istekler dış API'yi hiç beklemez, önbellekten okur.
+        if self.is_running and self._fetched_at is not None:
+            return
         with self._lock:
             if self._fetched_at and time.monotonic() - self._fetched_at < self._cache_seconds:
                 return
-            try:
-                fresh = self._fetcher()
-            except Exception as exc:
-                log.warning("Fiyatlar yenilenemedi, eski/yedek fiyatlar kullanılıyor: %s", exc)
-                fresh = {}
-            now = datetime.now(UTC)
-            for symbol, price in fresh.items():
-                asset = ASSETS_BY_SYMBOL.get(symbol)
-                if asset and price > 0:
-                    rounded = price.quantize(PRICE_STEP, rounding=ROUND_HALF_UP)
-                    self._quotes[symbol] = Quote(asset, rounded, now)
-            self._fetched_at = time.monotonic()
+            self._refresh()
+
+    # ---- arka planda yenileme ----
+    @property
+    def is_running(self) -> bool:
+        return self._thread is not None and self._thread.is_alive()
+
+    def start(self, interval: float | None = None) -> None:
+        """Fiyatları `interval` saniyede bir (varsayılan: cache_seconds) arka planda yeniler."""
+        if self.is_running:
+            return
+        wait = interval if interval is not None else self._cache_seconds
+        self._stop.clear()
+
+        def loop() -> None:
+            while not self._stop.is_set():
+                with self._lock:
+                    self._refresh()
+                self._stop.wait(wait)
+
+        self._thread = threading.Thread(target=loop, name="price-refresh", daemon=True)
+        self._thread.start()
+
+    def stop(self) -> None:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join(timeout=10)
+            self._thread = None
 
     def get_all(self) -> list[Quote]:
         self._refresh_if_stale()
