@@ -21,7 +21,7 @@ adresi için `index.html` içinde `app.js`'ten önce `window.SIMULINVEST_API = "
 
 - Giriş / kayıt (token tarayıcıda saklanır)
 - Nakit, toplam değer, toplam kâr/zarar kartları
-- Piyasa listesi (Hisse / Kripto / Altın filtresi, satıra tıklayınca al-sat formuna seçilir)
-- Al / Sat formu (tahmini tutar, hisse için tam sayı uyarısı)
-- Portföy ve işlem geçmişi
+- Piyasa: BIST hisseleri, kripto ve altın ayrı kartlarda (satıra tıklayınca al-sat formuna seçilir; demo fiyatlar `demo` etiketiyle işaretlenir)
+- Al / Sat formu: nakitle alınabilecek / elde olan en fazla miktar ve `Maks` düğmesi, tahmini tutar, hisse için tam sayı uyarısı
+- Portföy türe göre gruplu (ara toplam, değer ve kâr/zarar; türlere göre dağılım yüzdesi) ve işlem geçmişi
 - 30 saniyede bir fiyat ve portföy yenilenir

@@ -51,25 +51,14 @@
         <div class="card stat"><span class="muted">Toplam kâr / zarar</span><strong id="stat-pnl">—</strong></div>
       </section>
 
-      <section class="card market">
-        <div class="card-head">
-          <h2>Piyasa</h2>
-          <div class="tabs small" id="market-filter">
-            <button class="tab active" data-type="" type="button">Tümü</button>
-            <button class="tab" data-type="STOCK" type="button">Hisse</button>
-            <button class="tab" data-type="CRYPTO" type="button">Kripto</button>
-            <button class="tab" data-type="GOLD" type="button">Altın</button>
-          </div>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Sembol</th><th>Ad</th><th class="num">Fiyat</th></tr></thead>
-            <tbody id="market-body"></tbody>
-          </table>
-        </div>
+      <!-- BIST, kripto ve altın ayrı kartlarda; app.js doldurur -->
+      <section class="market" aria-label="Piyasa">
+        <div id="market-groups" class="market-groups"></div>
         <p class="muted small-text" id="market-updated"></p>
       </section>
 
+      <!-- Sarmalayıcı piyasa sütunu kadar uzar; form bu alan içinde yapışık (sticky) kalır -->
+      <div class="trade-wrap">
       <section class="card trade">
         <h2>Al / Sat</h2>
         <form id="trade-form">
@@ -83,22 +72,30 @@
             <label for="side-sell">Sat</label>
           </div>
           <label>Miktar
-            <input name="quantity" id="trade-qty" type="number" min="0" step="any" required>
+            <span class="qty-row">
+              <input name="quantity" id="trade-qty" type="number" min="0" step="any" required>
+              <button type="button" id="trade-max" class="btn ghost small" title="Alınabilecek / satılabilecek en fazla miktarı yaz">Maks</button>
+            </span>
           </label>
+          <p class="max-info" id="trade-max-info"></p>
           <p class="muted" id="trade-hint"></p>
           <p class="estimate">Tahmini tutar: <strong id="trade-estimate">—</strong></p>
           <p id="trade-msg" class="msg" hidden></p>
           <button class="btn primary" type="submit" id="trade-submit">Emri gönder</button>
         </form>
       </section>
+      </div>
 
       <section class="card holdings">
-        <h2>Portföyüm</h2>
+        <div class="card-head">
+          <h2>Portföyüm</h2>
+          <div id="allocation" class="allocation"></div>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr><th>Sembol</th><th class="num">Adet</th><th class="num">Ort. maliyet</th>
-                  <th class="num">Güncel</th><th class="num">K / Z</th></tr>
+                  <th class="num">Güncel</th><th class="num">Değer</th><th class="num">K / Z</th></tr>
             </thead>
             <tbody id="holdings-body"></tbody>
           </table>

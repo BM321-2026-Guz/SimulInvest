@@ -2,14 +2,20 @@
 const API = window.SIMULINVEST_API || "http://localhost:8000";
 const TOKEN_KEY = "simulinvest-token";
 const EMAIL_KEY = "simulinvest-email";
-const TYPE_LABELS = { STOCK: "Hisse", CRYPTO: "Kripto", GOLD: "Altın" };
+// Varlık grupları: piyasa, portföy ve al-sat listesi bu sırayla ayrılır.
+const GROUPS = [
+  { type: "STOCK", title: "BIST Hisseleri", short: "Hisse" },
+  { type: "CRYPTO", title: "Kripto Paralar", short: "Kripto" },
+  { type: "GOLD", title: "Altın", short: "Altın" },
+];
+const TYPE_LABELS = Object.fromEntries(GROUPS.map((g) => [g.type, g.short]));
 
 const $ = (sel) => document.querySelector(sel);
 const tl = new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" });
 const qtyFmt = new Intl.NumberFormat("tr-TR", { maximumFractionDigits: 8 });
 const dateFmt = new Intl.DateTimeFormat("tr-TR", { dateStyle: "short", timeStyle: "short" });
 
-const state = { assets: [], filter: "", authMode: "login", portfolio: null };
+const state = { assets: [], authMode: "login", portfolio: null };
 
 // ---------- yardımcılar ----------
 function storage(action, key, value) {
@@ -54,6 +60,14 @@ function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text;
   return div.innerHTML;
+}
+
+function dot(type) {
+  return `<span class="dot dot-${type.toLowerCase()}" aria-hidden="true"></span>`;
+}
+
+function typeOf(symbol) {
+  return state.assets.find((a) => a.symbol === symbol)?.type;
 }
 
 // ---------- giriş / kayıt ----------
@@ -112,30 +126,50 @@ async function loadAssets() {
     const latest = state.assets.map((a) => new Date(a.updatedAt)).sort((a, b) => b - a)[0];
     $("#market-updated").textContent = latest ? `Son güncelleme: ${dateFmt.format(latest)}` : "";
   } catch (err) {
-    $("#market-body").innerHTML = `<tr><td colspan="3" class="empty">${escapeHtml(err.message)}</td></tr>`;
+    $("#market-groups").innerHTML = `<div class="card empty">${escapeHtml(err.message)}</div>`;
   }
 }
 
 function renderMarket() {
   const selected = $("#trade-symbol").value;
-  const rows = state.assets
-    .filter((a) => !state.filter || a.type === state.filter)
-    .map(
-      (a) => `<tr data-symbol="${a.symbol}" class="${a.symbol === selected ? "selected" : ""}">
-        <td><span class="sym">${a.symbol}</span><span class="badge">${TYPE_LABELS[a.type]}</span></td>
-        <td>${escapeHtml(a.name)}</td>
-        <td class="num">${tl.format(a.price)}</td>
-      </tr>`
-    );
-  $("#market-body").innerHTML = rows.join("") || `<tr><td colspan="3" class="empty">Varlık yok</td></tr>`;
+  $("#market-groups").innerHTML = GROUPS.map((g) => {
+    const assets = state.assets.filter((a) => a.type === g.type);
+    if (!assets.length) return "";
+    const rows = assets
+      .map(
+        (a) => `<tr data-symbol="${a.symbol}" class="${a.symbol === selected ? "selected" : ""}">
+          <td><span class="sym">${a.symbol}</span></td>
+          <td>${escapeHtml(a.name)}</td>
+          <td class="num">${tl.format(a.price)}${
+            a.isFallback
+              ? ' <span class="badge demo" title="Canlı fiyat alınamadı, demo fiyat gösteriliyor">demo</span>'
+              : ""
+          }</td>
+        </tr>`
+      )
+      .join("");
+    return `<div class="card market-group">
+      <div class="card-head"><h2>${dot(g.type)}${g.title}</h2><span class="muted">${assets.length} varlık</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sembol</th><th>Ad</th><th class="num">Fiyat</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }).join("");
 }
 
 function renderSymbolOptions() {
   const select = $("#trade-symbol");
   const current = select.value;
-  select.innerHTML = state.assets
-    .map((a) => `<option value="${a.symbol}">${a.symbol} · ${escapeHtml(a.name)}</option>`)
-    .join("");
+  select.innerHTML = GROUPS.map((g) => {
+    const options = state.assets
+      .filter((a) => a.type === g.type)
+      .map((a) => `<option value="${a.symbol}">${a.symbol} · ${escapeHtml(a.name)}</option>`)
+      .join("");
+    return options ? `<optgroup label="${g.title}">${options}</optgroup>` : "";
+  }).join("");
   if (current) select.value = current;
   updateEstimate();
 }
@@ -145,16 +179,51 @@ function selectedAsset() {
   return state.assets.find((a) => a.symbol === $("#trade-symbol").value);
 }
 
+function selectedSide() {
+  return document.querySelector("#trade-form [name=side]:checked").value;
+}
+
+// Nakitle alınabilecek en fazla miktar: hissede tam adet, kripto/altında 8 ondalık (aşağı yuvarlanır).
+function maxBuyable(asset, balance) {
+  if (!asset || !(asset.price > 0) || !(balance > 0)) return 0;
+  const step = asset.type === "STOCK" ? 1 : 1e-8;
+  let qty = Math.floor(balance / asset.price / step) * step;
+  // Kayan nokta hatası tutarı bakiyenin üstüne çıkarmasın.
+  while (qty > 0 && qty * asset.price > balance) qty -= step;
+  return Number(qty.toFixed(asset.type === "STOCK" ? 0 : 8));
+}
+
+function maxQuantity(asset) {
+  if (!asset || !state.portfolio) return 0;
+  if (selectedSide() === "SELL") {
+    return state.portfolio.holdings.find((h) => h.symbol === asset.symbol)?.quantity || 0;
+  }
+  return maxBuyable(asset, state.portfolio.balance);
+}
+
 function updateEstimate() {
   const asset = selectedAsset();
   const qty = Number($("#trade-qty").value);
   $("#trade-estimate").textContent = asset && qty > 0 ? tl.format(asset.price * qty) : "—";
 
-  const owned = state.portfolio?.holdings.find((h) => h.symbol === asset?.symbol);
-  const parts = [];
-  if (asset?.type === "STOCK") parts.push("Hisse adedi tam sayı olmalı.");
-  if (owned) parts.push(`Elinde ${qtyFmt.format(owned.quantity)} adet var.`);
-  $("#trade-hint").textContent = parts.join(" ");
+  const max = maxQuantity(asset);
+  const info = $("#trade-max-info");
+  if (!asset || !state.portfolio) {
+    info.textContent = "";
+  } else if (selectedSide() === "SELL") {
+    info.innerHTML = max
+      ? `Satabileceğin en fazla: <strong>${qtyFmt.format(max)}</strong> adet`
+      : "Bu varlıktan elinde yok.";
+  } else {
+    info.innerHTML = max
+      ? `Nakdinle en fazla <strong>${qtyFmt.format(max)}</strong> adet alabilirsin
+         <span class="muted">(${tl.format(max * asset.price)})</span>`
+      : "Bu varlıktan 1 adet almaya bile nakdin yetmiyor.";
+  }
+  info.classList.toggle("over", qty > max);
+  $("#trade-max").disabled = !max;
+
+  $("#trade-hint").textContent = asset?.type === "STOCK" ? "Hisse adedi tam sayı olmalı." : "";
   $("#trade-qty").step = asset?.type === "STOCK" ? "1" : "any";
 }
 
@@ -196,18 +265,44 @@ async function loadPortfolio() {
   pnl.textContent = signed(p.totalProfitLoss);
   pnl.className = pnlClass(p.totalProfitLoss);
 
+  const invested = p.holdings.reduce((sum, h) => sum + h.quantity * h.currentPrice, 0);
+  const groups = GROUPS.map((g) => {
+    const items = p.holdings.filter((h) => h.type === g.type);
+    const value = items.reduce((sum, h) => sum + h.quantity * h.currentPrice, 0);
+    const pnl = items.reduce((sum, h) => sum + h.profitLoss, 0);
+    return { ...g, items, value, pnl };
+  }).filter((g) => g.items.length);
+
+  // Varlık türüne göre dağılım (nakit hariç).
+  $("#allocation").innerHTML = groups
+    .map(
+      (g) => `<span class="chip">${dot(g.type)}${g.short}
+        <strong>%${Math.round((g.value / invested) * 100)}</strong></span>`
+    )
+    .join("");
+
   $("#holdings-body").innerHTML =
-    p.holdings
+    groups
       .map(
-        (h) => `<tr>
-          <td><span class="sym">${h.symbol}</span><span class="badge">${TYPE_LABELS[h.type]}</span></td>
-          <td class="num">${qtyFmt.format(h.quantity)}</td>
-          <td class="num">${tl.format(h.averageCost)}</td>
-          <td class="num">${tl.format(h.currentPrice)}</td>
-          <td class="num ${pnlClass(h.profitLoss)}">${signed(h.profitLoss)}</td>
-        </tr>`
+        (g) => `<tr class="group">
+            <td colspan="4">${dot(g.type)}${g.title}</td>
+            <td class="num">${tl.format(g.value)}</td>
+            <td class="num ${pnlClass(g.pnl)}">${signed(g.pnl)}</td>
+          </tr>` +
+          g.items
+            .map(
+              (h) => `<tr>
+                <td><span class="sym">${h.symbol}</span></td>
+                <td class="num">${qtyFmt.format(h.quantity)}</td>
+                <td class="num">${tl.format(h.averageCost)}</td>
+                <td class="num">${tl.format(h.currentPrice)}</td>
+                <td class="num">${tl.format(h.quantity * h.currentPrice)}</td>
+                <td class="num ${pnlClass(h.profitLoss)}">${signed(h.profitLoss)}</td>
+              </tr>`
+            )
+            .join("")
       )
-      .join("") || `<tr><td colspan="5" class="empty">Portföyün boş. Piyasadan bir varlık seçip alım yap.</td></tr>`;
+      .join("") || `<tr><td colspan="6" class="empty">Portföyün boş. Piyasadan bir varlık seçip alım yap.</td></tr>`;
   updateEstimate();
 }
 
@@ -218,7 +313,9 @@ async function loadHistory() {
       .map(
         (t) => `<tr>
           <td>${dateFmt.format(new Date(t.createdAt))}</td>
-          <td class="sym">${t.symbol}</td>
+          <td><span class="sym">${t.symbol}</span>${
+            typeOf(t.symbol) ? `<span class="badge">${TYPE_LABELS[typeOf(t.symbol)]}</span>` : ""
+          }</td>
           <td class="${t.side === "BUY" ? "up" : "down"}">${t.side === "BUY" ? "Alış" : "Satış"}</td>
           <td class="num">${qtyFmt.format(t.quantity)}</td>
           <td class="num">${tl.format(t.price)}</td>
@@ -252,16 +349,18 @@ $("#trade-symbol").addEventListener("change", () => {
   renderMarket();
 });
 $("#trade-qty").addEventListener("input", updateEstimate);
-
-$("#market-filter").addEventListener("click", (e) => {
-  const tab = e.target.closest(".tab");
-  if (!tab) return;
-  state.filter = tab.dataset.type;
-  document.querySelectorAll("#market-filter .tab").forEach((t) => t.classList.toggle("active", t === tab));
-  renderMarket();
+document
+  .querySelectorAll("#trade-form [name=side]")
+  .forEach((r) => r.addEventListener("change", updateEstimate));
+$("#trade-max").addEventListener("click", () => {
+  const max = maxQuantity(selectedAsset());
+  if (!max) return;
+  $("#trade-qty").value = max;
+  updateEstimate();
+  $("#trade-qty").focus();
 });
 
-$("#market-body").addEventListener("click", (e) => {
+$("#market-groups").addEventListener("click", (e) => {
   const row = e.target.closest("tr[data-symbol]");
   if (!row) return;
   $("#trade-symbol").value = row.dataset.symbol;

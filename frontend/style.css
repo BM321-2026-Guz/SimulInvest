@@ -9,6 +9,9 @@
   --up: #0f8a4f;
   --down: #c8312b;
   --row-hover: #f0f4fc;
+  --stock: #2456d6;
+  --crypto: #c26a00;
+  --gold: #b8930a;
   --radius: 10px;
   color-scheme: light;
 }
@@ -25,6 +28,9 @@
     --up: #3ccf8a;
     --down: #ff6b63;
     --row-hover: #1e2836;
+    --stock: #5b8cff;
+    --crypto: #ff9f3a;
+    --gold: #e6c140;
     color-scheme: dark;
   }
 }
@@ -144,7 +150,8 @@ input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1
 }
 .stats { grid-area: stats; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .market { grid-area: market; }
-.trade { grid-area: trade; align-self: start; }
+.trade-wrap { grid-area: trade; min-width: 0; }
+.trade { position: sticky; top: 16px; }
 .holdings { grid-area: holdings; }
 .history { grid-area: history; }
 
@@ -198,6 +205,7 @@ tr:last-child td { border-bottom: 0; }
 .footer { text-align: center; font-size: 12px; padding: 8px 16px 24px; }
 
 @media (max-width: 860px) {
+  .trade { position: static; }
   .layout {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "stats" "trade" "market" "holdings" "history";
@@ -207,3 +215,45 @@ tr:last-child td { border-bottom: 0; }
   .topbar { padding: 12px 16px; }
   #user-email { display: none; }
 }
+
+/* Varlık türleri: BIST, kripto, altın */
+.market-groups { display: grid; gap: 16px; }
+.market-group h2 { display: flex; align-items: center; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; flex: none; }
+.dot-stock { background: var(--stock); }
+.dot-crypto { background: var(--crypto); }
+.dot-gold { background: var(--gold); }
+
+.allocation { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.chip strong { color: var(--text); }
+
+tr.group td {
+  background: var(--bg);
+  font-weight: 600;
+  font-size: 13px;
+}
+.badge.demo {
+  color: var(--crypto);
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+/* Miktar + Maks */
+.qty-row { display: flex; gap: 6px; }
+.qty-row input { flex: 1; min-width: 0; }
+.btn.small { padding: 6px 12px; font-size: 13px; }
+.btn.ghost:disabled { opacity: 0.5; cursor: not-allowed; }
+.max-info { margin: -4px 0 0; font-size: 13px; }
+.max-info strong { font-variant-numeric: tabular-nums; }
+.max-info.over { color: var(--down); }
