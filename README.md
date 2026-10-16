@@ -53,6 +53,19 @@ Gerçek banka/kredi kartı entegrasyonu, limit/stop-loss emirleri ve WebSocket i
 
 ## Kurulum ve Çalıştırma
 
+### Geliştirme: Kontrol Paneli (tek tık)
+
+Python 3.13 kurulu olması yeterli. Panel ilk açılışta Python ortamını, paketleri ve `.env` dosyasını kendisi hazırlar; backend'i ve arayüzü başlatıp tarayıcıyı açar.
+
+| Sistem | Çift tıkla |
+|---|---|
+| Windows | `tools/kontrol-paneli/SimulInvest Kontrol.bat` |
+| macOS | `tools/kontrol-paneli/SimulInvest Kontrol.command` |
+
+Ayrıntılar: [`tools/kontrol-paneli/README.md`](tools/kontrol-paneli/README.md)
+
+### Final: Docker
+
 Proje Docker ile tek komutla çalışacak şekilde hazırlanacaktır (hedef: 12. hafta).
 
 ```bash

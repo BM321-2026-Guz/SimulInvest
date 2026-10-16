@@ -1,0 +1,5 @@
+# Kişiye özel ayarlar ve loglar
+simulinvest_kontrol_ayarlar.json
+simulinvest_kontrol.log
+
+__pycache__/
