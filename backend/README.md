@@ -61,5 +61,7 @@ CI (`.github/workflows/backend-ci.yml`) her PR'da ruff, pytest ve en az %50 kaps
   iki emir bakiyeyi aynı anda okuyamaz; ayrıca DB'de `balance >= 0` kısıtı vardır.
 - Hisse adedi tam sayı olmalıdır; kripto ve altında 8 ondalığa kadar izin verilir.
 - Fiyatlar 60 sn önbellekte tutulur. Kaynak hata verirse son bilinen, o da yoksa
-  `asset_catalog.py` içindeki demo fiyat kullanılır.
+  `asset_catalog.py` içindeki demo fiyat kullanılır. Demo fiyat kullanılan varlıklar
+  `/api/assets` yanıtında `isFallback: true` ile işaretlenir; son bilinen gerçek fiyatta bu alan
+  `false` kalır ve fiyatın ne kadar eski olduğu `updatedAt` alanından anlaşılır.
 - Fiyat kaynakları: BIST ve altın için Yahoo Finance, kripto için CoinGecko (anahtarsız uç noktalar).

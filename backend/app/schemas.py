@@ -55,6 +55,9 @@ class Asset(ApiModel):
     type: AssetType
     price: Number
     updated_at: datetime
+    is_fallback: bool = Field(
+        description="True ise dış kaynaktan fiyat alınamadı; gösterilen fiyat demo değeridir."
+    )
 
 
 class Holding(ApiModel):

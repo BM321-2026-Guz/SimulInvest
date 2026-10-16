@@ -282,6 +282,12 @@ components:
         updatedAt:
           type: string
           format: date-time
+        isFallback:
+          type: boolean
+          description: >
+            true ise dış kaynaktan hiç fiyat alınamadı ve gösterilen değer demo (yedek) fiyattır.
+            Son bilinen gerçek fiyat kullanılıyorsa false olur; fiyatın yaşı updatedAt'ten anlaşılır.
+          example: false
 
     Holding:
       type: object
