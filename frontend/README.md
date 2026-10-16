@@ -24,4 +24,4 @@ adresi için `index.html` içinde `app.js`'ten önce `window.SIMULINVEST_API = "
 - Piyasa: BIST hisseleri, kripto ve altın ayrı kartlarda (satıra tıklayınca al-sat formuna seçilir; demo fiyatlar `demo` etiketiyle işaretlenir)
 - Al / Sat formu: nakitle alınabilecek / elde olan en fazla miktar ve `Maks` düğmesi, tahmini tutar, hisse için tam sayı uyarısı
 - Portföy türe göre gruplu (ara toplam, değer ve kâr/zarar; türlere göre dağılım yüzdesi) ve işlem geçmişi
-- 30 saniyede bir fiyat ve portföy yenilenir
+- 5 saniyede bir fiyat ve portföy yenilenir (`app.js` içindeki `REFRESH_MS`); sekme arka plandayken yenilenmez
