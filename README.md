@@ -38,7 +38,13 @@ Gerçek banka/kredi kartı entegrasyonu, limit/stop-loss emirleri ve WebSocket i
 
 ## Dokümantasyon
 
+- Kullanıcı hikayeleri ve backlog: [`docs/user-stories.md`](docs/user-stories.md)
 - API sözleşmesi: [`docs/openapi.yaml`](docs/openapi.yaml)
+- Veri modeli (ERD): [`docs/architecture/erd.md`](docs/architecture/erd.md)
+- RACI matrisi: [`docs/raci.md`](docs/raci.md)
+- Test stratejisi: [`docs/test-strategy.md`](docs/test-strategy.md)
+- DevOps planı: [`docs/devops-plan.md`](docs/devops-plan.md)
+- Sprint planı: [`docs/sprint-plan.md`](docs/sprint-plan.md)
 - Katkı kuralları: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ## Teknoloji Yığını
@@ -52,6 +58,8 @@ Gerçek banka/kredi kartı entegrasyonu, limit/stop-loss emirleri ve WebSocket i
 - Statik analiz: SonarQube (final raporu)
 
 ## Kurulum ve Çalıştırma
+
+Backend'i yerelde çalıştırmak için [`backend/README.md`](backend/README.md) dosyasına bakın.
 
 Proje Docker ile tek komutla çalışacak şekilde hazırlanacaktır (hedef: 12. hafta).
 
