@@ -1,10 +1,12 @@
 # Yazılım Gereksinim Belirtimi (SRS)
 ## 1. Giriş
 -Amaç: Bu belge SimulInvest sisteminin ne yapacağını tanımlar.
+
 -Kapsam: Gerçek para riski olmadan Borsa, Kripto ve Altın alım-satımı simülasyonu.
 
 ## 2. Genel tanım
 -Kullanıcı tipi: Bireysel yatırım simülasyonu kullanıcısı.
+
 -Kısıt: Uygulama yalnızca simülasyondur, gerçek para yoktur.
 
 ## 3. Fonksiyonel gereksinimler
