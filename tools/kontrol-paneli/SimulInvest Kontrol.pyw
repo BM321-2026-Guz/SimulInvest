@@ -30,6 +30,18 @@ APP_DIR = Path(__file__).resolve().parent
 CONFIG_FILE = APP_DIR / "simulinvest_kontrol_ayarlar.json"
 LOG_FILE = APP_DIR / "simulinvest_kontrol.log"
 
+# Arayüzü sunan küçük sunucu: `python -m http.server` ile aynı, ama "önbelleğe alma" başlığı
+# gönderir. Aksi halde tarayıcı eski app.js / index.html'i bir süre önbellekten gösterebiliyor ve
+# yeni özellikler (ör. ayrıntı panosu) yenilemeye rağmen görünmüyor.
+NO_CACHE_SERVER = (
+    "import http.server, sys\n"
+    "class Handler(http.server.SimpleHTTPRequestHandler):\n"
+    "    def end_headers(self):\n"
+    "        self.send_header('Cache-Control', 'no-store')\n"
+    "        super().end_headers()\n"
+    "http.server.test(HandlerClass=Handler, port=int(sys.argv[1]), bind='127.0.0.1')\n"
+)
+
 DEFAULTS = {
     "repo": "",  # boşsa tahmin edilir (bkz. guess_folder)
     "ui_repo": "",
@@ -633,8 +645,7 @@ class App(tk.Tk):
             self._step("      Arayüz zaten çalışıyor.")
         elif not self.frontend.running:
             self._step(f"      Arayüz başlatılıyor: http://127.0.0.1:{fp}")
-            self.frontend.start([str(py), "-m", "http.server", str(fp), "--bind", "127.0.0.1"],
-                                cwd=frontend)
+            self.frontend.start([str(py), "-c", NO_CACHE_SERVER, str(fp)], cwd=frontend)
 
         # 4) Backend hazır olana kadar bekle
         self._step("[4/4] Backend'in hazır olması bekleniyor…")
