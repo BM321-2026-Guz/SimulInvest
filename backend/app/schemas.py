@@ -57,6 +57,23 @@ class Asset(ApiModel):
     updated_at: datetime
 
 
+class PricePoint(ApiModel):
+    time: datetime
+    price: Number
+
+
+class AssetHistory(ApiModel):
+    """Varlık ayrıntı panosu: grafik noktaları ve günlük özet (issue #49)."""
+
+    symbol: str
+    range: str
+    open: Number | None = Field(description="Son işlem gününün açılış fiyatı (TL)")
+    previous_close: Number | None = Field(description="Bir önceki işlem gününün kapanışı (TL)")
+    day_low: Number | None = Field(description="Gün içi en düşük (TL)")
+    day_high: Number | None = Field(description="Gün içi en yüksek (TL)")
+    points: list[PricePoint]
+
+
 class Holding(ApiModel):
     symbol: str
     type: AssetType
