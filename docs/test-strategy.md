@@ -36,3 +36,16 @@ SimulInvest MVP özellikleri için belirlenen başlangıç test senaryoları aş
 | 5 | Yanlış şifre ile oturum açılmaya çalışılması | Entegrasyon | Oturum açılmaz, 401 Unauthorized hatası döner. |
 | 6 | Başarılı satış işlemi sonrası portföy ve bakiye değişimi | Birim / E2E | Satılan varlık portföyden düşer, elde edilen tutar nakit bakiyeye eklenir. |
 | 7 | Negatif miktarda varlık alım/satım denemesi | Birim | Doğrulama hatası fırlatılır, işlem veritabanına kaydedilmez. |
+
+
+## Mevcut testler
+
+| Senaryo | Test fonksiyonu | Durum |
+|---|---|---|
+| Bakiye yetersizken alım denenmesi | `test_buy_with_insufficient_balance_is_rejected` | Var |
+| Sahip olunmayan varlığın satılmaya çalışılması | `test_sell_unowned_asset_is_rejected` | Var |
+| Yeni kullanıcının başarıyla kaydolması (cüzdan oluşumu) | `test_register_creates_wallet_with_initial_balance` | Var |
+| Aynı e-posta adresiyle kayıt denenmesi (Duplicate email) | `test_duplicate_email_is_rejected` | Var |
+| Yanlış şifre ile oturum açılmaya çalışılması | `test_login_wrong_password` | Var |
+| Başarılı satış işlemi sonrası bakiye ve varlık güncellenmesi | `test_sell_updates_balance_and_holding` | Var |
+| Negatif veya sıfır miktarda alım/satım denemesi | `test_negative_or_zero_quantity_is_rejected` | Var |
