@@ -242,12 +242,8 @@ tr.group td {
   font-weight: 600;
   font-size: 13px;
 }
-.badge.demo {
-  color: var(--crypto);
-  border: 1px solid currentColor;
-  border-radius: 4px;
-  padding: 0 4px;
-}
+tr.clickable { cursor: pointer; }
+tr.clickable:hover { background: var(--row-hover); }
 
 /* Miktar + Maks */
 .qty-row { display: flex; gap: 6px; }
@@ -257,3 +253,133 @@ tr.group td {
 .max-info { margin: -4px 0 0; font-size: 13px; }
 .max-info strong { font-variant-numeric: tabular-nums; }
 .max-info.over { color: var(--down); }
+
+/* ---------- Varlık ayrıntı panosu (issue #49) ---------- */
+body.no-scroll { overflow: hidden; }
+
+.detail-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(10, 15, 25, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.detail {
+  width: min(1100px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+.detail-nav {
+  font: inherit;
+  font-size: 14px;
+  color: var(--muted);
+  background: var(--card);
+  border: 0;
+  padding: 12px 20px;
+  text-align: left;
+  cursor: pointer;
+}
+.detail-nav:first-child { border-bottom: 1px solid var(--border); border-radius: 14px 14px 0 0; }
+.detail-nav:last-child { border-top: 1px solid var(--border); border-radius: 0 0 14px 14px; }
+.detail-nav:hover { color: var(--text); background: var(--row-hover); }
+.detail-nav strong { color: var(--text); font-weight: 600; }
+
+.detail-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 16px;
+  padding: 16px;
+}
+.detail-col { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.detail h3 { margin: 0; font-size: 15px; font-weight: 600; }
+
+.detail-head { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: start; }
+.detail-title { display: flex; align-items: center; gap: 4px; }
+.detail-title h2 { font-size: 22px; }
+.detail-head p { margin: 2px 0 0; }
+.detail-price { grid-column: 1; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.detail-price strong { font-size: 26px; font-variant-numeric: tabular-nums; }
+.detail-price span { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.detail-actions { grid-column: 2; grid-row: 1; display: flex; gap: 6px; }
+
+.detail-news { min-height: 320px; display: flex; flex-direction: column; }
+.placeholder {
+  flex: 1;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 24px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+.placeholder p { margin: 4px 0; font-size: 14px; }
+.badge.soon {
+  color: var(--accent);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 1px 8px;
+  margin: 0;
+}
+
+.chart-box { position: relative; }
+.chart-msg { text-align: center; padding: 80px 0; margin: 0; }
+.chart { width: 100%; height: auto; display: block; }
+.chart .grid { stroke: var(--border); stroke-width: 1; }
+.chart .axis { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.chart .line { fill: none; stroke-width: 2; stroke-linejoin: round; }
+.chart.up .line { stroke: var(--up); }
+.chart.down .line { stroke: var(--down); }
+.chart .area { opacity: 0.12; }
+.chart.up .area { fill: var(--up); }
+.chart.down .area { fill: var(--down); }
+.chart .cursor { stroke: var(--muted); stroke-dasharray: 3 3; }
+.chart circle { fill: var(--card); stroke-width: 2; }
+.chart.up circle { stroke: var(--up); }
+.chart.down circle { stroke: var(--down); }
+.chart .hit { fill: transparent; cursor: crosshair; }
+.chart-tip {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: grid;
+  text-align: center;
+  font-size: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.chart-tip strong { font-variant-numeric: tabular-nums; }
+.chart-tip span { color: var(--muted); }
+
+.detail-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.stat-item { display: grid; gap: 2px; font-size: 12px; }
+.stat-item strong { font-size: 15px; font-variant-numeric: tabular-nums; }
+.detail-ai { display: flex; flex-direction: column; min-height: 140px; }
+
+@media (max-width: 860px) {
+  .detail-backdrop { padding: 0; place-items: stretch; }
+  .detail { max-height: 100vh; border-radius: 0; }
+  .detail-nav:first-child, .detail-nav:last-child { border-radius: 0; }
+  .detail-body { grid-template-columns: minmax(0, 1fr); }
+  /* Mobilde tek sütun: ad → grafik → özet → haberler → YZ */
+  .detail-col { display: contents; }
+  .detail-head { order: 0; }
+  .detail-chart { order: 1; }
+  .detail-stats { order: 2; }
+  .detail-news { order: 3; }
+  .detail-ai { order: 4; }
+  .detail-stats { grid-template-columns: repeat(2, 1fr); }
+  .detail-news { min-height: 200px; }
+  .chart .axis { font-size: 20px; } /* SVG telefonda küçülüyor; etiketler okunur kalsın */
+}
