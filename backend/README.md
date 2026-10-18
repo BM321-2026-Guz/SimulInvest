@@ -63,6 +63,9 @@ CI (`.github/workflows/backend-ci.yml`) her PR'da ruff, pytest ve en az %50 kaps
 - Fiyatlar arka planda 10 sn'de bir yenilenir (`PRICE_CACHE_SECONDS`); istekler dış API'yi hiç beklemez,
   önbellekten okur. Yahoo'daki 12 sembol tek toplu istekle alınır. CoinGecko verisi zaten ~10-20 sn'de
   bir güncellendiği ve ücretsiz sınır dakikada ~30 istek olduğu için daha kısa aralık önerilmez.
+  Demo arayüz (`frontend/app.js`, `REFRESH_MS`) backend'e 5 sn'de bir sorar; ikisi birlikte
+  ekrandaki fiyat en fazla ~15 sn (10 + 5) eski olur. Arayüz backend'den sık sorduğu için dış API'lere
+  giden istek sayısı artmaz, o sayıyı sadece `PRICE_CACHE_SECONDS` belirler.
   BIST fiyatları Yahoo'da ~15 dk gecikmelidir. Kaynak hata verirse son bilinen, o da yoksa
   `asset_catalog.py` içindeki demo fiyat kullanılır. Demo fiyat kullanılan varlıklar
   `/api/assets` yanıtında `isFallback: true` ile işaretlenir; son bilinen gerçek fiyatta bu alan
