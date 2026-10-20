@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+import math
+
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -8,6 +10,7 @@ from app.errors import AppError
 from app.models import User
 from app.schemas import AuthResponse, LoginRequest, RegisterRequest
 from app.security import create_access_token, hash_password, verify_password
+from app.services.login_limiter import LoginRateLimiter, get_login_limiter
 from app.services.trade_service import create_wallet
 
 router = APIRouter(prefix="/api/auth", tags=["Auth"])
@@ -34,8 +37,28 @@ def register(body: RegisterRequest, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=AuthResponse)
-def login(body: LoginRequest, db: Session = Depends(get_db)):
-    user = db.scalars(select(User).where(User.email == body.email.lower())).first()
+def login(
+    body: LoginRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+    limiter: LoginRateLimiter = Depends(get_login_limiter),
+):
+    ip = request.client.host if request.client else "unknown"
+    email = body.email.lower()
+
+    # Engelliyken şifre hiç kontrol edilmez: doğru şifre de 429 alır, deneme işe yaramaz.
+    wait = limiter.retry_after(ip, email)
+    if wait:
+        raise AppError(
+            429,
+            "TOO_MANY_ATTEMPTS",
+            f"Çok fazla hatalı giriş denemesi. {math.ceil(wait / 60)} dakika sonra tekrar dene.",
+            headers={"Retry-After": str(wait)},
+        )
+
+    user = db.scalars(select(User).where(User.email == email)).first()
     if user is None or not verify_password(body.password, user.password_hash):
+        limiter.record_failure(ip, email)
         raise AppError(401, "INVALID_CREDENTIALS", "E-posta veya şifre hatalı.")
+    limiter.record_success(ip, email)
     return _token_response(user)

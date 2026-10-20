@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     jwt_secret: str = Field(min_length=32)
     jwt_algorithm: str = "HS256"
     jwt_expires_seconds: int = 3600
+    # Login deneme sınırı: pencere içinde izin verilen hatalı deneme sayıları.
+    login_max_attempts: int = 5
+    login_max_attempts_per_ip: int = 20
+    login_window_seconds: int = 900
     initial_balance: Decimal = Decimal("100000.00")
     price_source: str = "live"  # live | mock
     price_cache_seconds: int = 60

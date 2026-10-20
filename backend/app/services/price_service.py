@@ -28,6 +28,8 @@ class Quote:
     asset: AssetInfo
     price: Decimal
     updated_at: datetime
+    # True: dış kaynaktan hiç fiyat alınamadı, katalogdaki demo fiyat gösteriliyor (issue #40).
+    is_fallback: bool = False
 
 
 class PriceService:
@@ -37,7 +39,9 @@ class PriceService:
         self._lock = threading.Lock()
         self._fetched_at: float | None = None
         now = datetime.now(UTC)
-        self._quotes: dict[str, Quote] = {a.symbol: Quote(a, a.fallback_price, now) for a in ASSETS}
+        self._quotes: dict[str, Quote] = {
+            a.symbol: Quote(a, a.fallback_price, now, is_fallback=True) for a in ASSETS
+        }
 
     def _refresh_if_stale(self) -> None:
         with self._lock:
