@@ -1,0 +1,259 @@
+:root {
+  --bg: #f4f6f9;
+  --card: #ffffff;
+  --text: #17202e;
+  --muted: #667085;
+  --border: #e3e7ee;
+  --accent: #2456d6;
+  --accent-text: #ffffff;
+  --up: #0f8a4f;
+  --down: #c8312b;
+  --row-hover: #f0f4fc;
+  --stock: #2456d6;
+  --crypto: #c26a00;
+  --gold: #b8930a;
+  --radius: 10px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f141c;
+    --card: #171e29;
+    --text: #e6eaf0;
+    --muted: #8d98a8;
+    --border: #273141;
+    --accent: #5b8cff;
+    --accent-text: #0b1220;
+    --up: #3ccf8a;
+    --down: #ff6b63;
+    --row-hover: #1e2836;
+    --stock: #5b8cff;
+    --crypto: #ff9f3a;
+    --gold: #e6c140;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+[hidden] { display: none !important; }
+
+h1, h2 { margin: 0; }
+h2 { font-size: 16px; font-weight: 600; }
+
+.logo { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+.logo span { color: var(--accent); }
+
+.muted { color: var(--muted); }
+.small-text { font-size: 12px; margin: 8px 0 0; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+/* Formlar */
+form { display: grid; gap: 12px; margin-top: 12px; }
+label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+
+input, select {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 10px;
+  width: 100%;
+}
+input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+.btn {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn.primary { background: var(--accent); color: var(--accent-text); }
+.btn.primary:disabled { opacity: 0.6; cursor: wait; }
+.btn.ghost { background: transparent; color: var(--text); border-color: var(--border); }
+
+.tabs { display: flex; gap: 4px; background: var(--bg); padding: 4px; border-radius: 8px; }
+.tab {
+  flex: 1;
+  font: inherit;
+  font-size: 14px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.tab.active { background: var(--card); color: var(--text); font-weight: 600; }
+.tabs.small .tab { font-size: 13px; padding: 5px 10px; }
+
+.error { color: var(--down); margin: 0; font-size: 14px; }
+.msg { margin: 0; font-size: 14px; }
+.msg.ok { color: var(--up); }
+.msg.fail { color: var(--down); }
+
+/* Giriş ekranı */
+.auth { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
+.auth-card { width: 100%; max-width: 380px; padding: 28px; }
+.auth-card .muted { margin: 6px 0 20px; }
+
+/* Üst bar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+
+/* Yerleşim */
+.layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-areas:
+    "stats stats"
+    "market trade"
+    "holdings holdings"
+    "history history";
+  gap: 16px;
+}
+.stats { grid-area: stats; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.market { grid-area: market; }
+.trade-wrap { grid-area: trade; min-width: 0; }
+.trade { position: sticky; top: 16px; }
+.holdings { grid-area: holdings; }
+.history { grid-area: history; }
+
+.layout > * { min-width: 0; }
+.stat { display: grid; gap: 4px; }
+.stat strong { font-size: 22px; font-variant-numeric: tabular-nums; }
+
+/* Tablolar */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+td { padding: 9px 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.market tbody tr { cursor: pointer; }
+.market tbody tr:hover, .market tbody tr.selected { background: var(--row-hover); }
+.empty { color: var(--muted); text-align: center; padding: 20px; }
+.sym { font-weight: 600; }
+.badge { font-size: 11px; color: var(--muted); margin-left: 6px; }
+
+.up { color: var(--up); }
+.down { color: var(--down); }
+
+/* Al / Sat seçici */
+.side-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.side-toggle { position: relative; }
+.side-toggle input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.side-toggle label {
+  text-align: center;
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+#side-buy:checked + label { border-color: var(--up); color: var(--up); }
+#side-sell:checked + label { border-color: var(--down); color: var(--down); }
+.estimate { margin: 0; font-size: 14px; }
+#trade-hint { margin: -6px 0 0; font-size: 12px; }
+
+.footer { text-align: center; font-size: 12px; padding: 8px 16px 24px; }
+
+@media (max-width: 860px) {
+  .trade { position: static; }
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "stats" "trade" "market" "holdings" "history";
+    padding: 16px;
+  }
+  .stats { grid-template-columns: 1fr; }
+  .topbar { padding: 12px 16px; }
+  #user-email { display: none; }
+}
+
+/* Varlık türleri: BIST, kripto, altın */
+.market-groups { display: grid; gap: 16px; }
+.market-group h2 { display: flex; align-items: center; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; flex: none; }
+.dot-stock { background: var(--stock); }
+.dot-crypto { background: var(--crypto); }
+.dot-gold { background: var(--gold); }
+
+.allocation { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.chip strong { color: var(--text); }
+
+tr.group td {
+  background: var(--bg);
+  font-weight: 600;
+  font-size: 13px;
+}
+.badge.demo {
+  color: var(--crypto);
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+/* Miktar + Maks */
+.qty-row { display: flex; gap: 6px; }
+.qty-row input { flex: 1; min-width: 0; }
+.btn.small { padding: 6px 12px; font-size: 13px; }
+.btn.ghost:disabled { opacity: 0.5; cursor: not-allowed; }
+.max-info { margin: -4px 0 0; font-size: 13px; }
+.max-info strong { font-variant-numeric: tabular-nums; }
+.max-info.over { color: var(--down); }
