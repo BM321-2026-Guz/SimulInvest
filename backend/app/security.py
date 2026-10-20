@@ -47,6 +47,9 @@ def get_current_user(
     except (jwt.PyJWTError, KeyError, ValueError):
         raise unauthorized from None
     user = db.get(User, user_id)
+    # Okuma bitti: transaction'ı kapatıp yazma kilidini bırak. Aksi halde endpoint dış fiyat
+    # API'sini beklerken diğer tüm istekler kilitte bekler (issue #37).
+    db.commit()
     if user is None:
         raise unauthorized
     return user
