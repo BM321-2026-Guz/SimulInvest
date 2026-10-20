@@ -22,7 +22,9 @@ class Settings(BaseSettings):
     login_window_seconds: int = 900
     initial_balance: Decimal = Decimal("100000.00")
     price_source: str = "live"  # live | mock
-    price_cache_seconds: int = 60
+    # Arka planda fiyat yenileme aralığı. CoinGecko verisi ~10-20 sn'de bir güncellendiği için
+    # daha kısası fayda getirmez ve ücretsiz API sınırına (dakikada ~30 istek) yaklaştırır.
+    price_cache_seconds: int = 10
     cors_origins: list[str] = ["http://localhost:5500", "http://127.0.0.1:5500"]
 
 

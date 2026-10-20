@@ -11,6 +11,9 @@ from app.services.asset_catalog import ASSETS
 log = logging.getLogger(__name__)
 
 YAHOO_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
+# Tek istekte birden çok sembol: 12 sembol için ~0,5 sn (tek tek ~2,6 sn).
+YAHOO_BATCH_URL = "https://query1.finance.yahoo.com/v7/finance/spark"
+GOLD_SYMBOLS = ("GC=F", "USDTRY=X")  # ons altın (USD) ve dolar/TL
 COINGECKO_URL = "https://api.coingecko.com/api/v3/simple/price"
 TROY_OUNCE_GRAMS = Decimal("31.1034768")
 # Yahoo, tarayıcı olmayan istemcileri User-Agent olmadan reddediyor.
@@ -24,22 +27,45 @@ def _yahoo_price(client: httpx.Client, yahoo_symbol: str) -> Decimal:
     return Decimal(str(meta["regularMarketPrice"]))
 
 
+def _yahoo_batch(client: httpx.Client, yahoo_symbols: list[str]) -> dict[str, Decimal]:
+    """Toplu istek; hata olursa boş döner, eksik semboller tek tek denenir."""
+    try:
+        response = client.get(
+            YAHOO_BATCH_URL,
+            params={"symbols": ",".join(yahoo_symbols), "range": "1d", "interval": "1d"},
+        )
+        response.raise_for_status()
+        results = response.json()["spark"]["result"] or []
+    except Exception as exc:
+        log.warning("Yahoo toplu fiyat isteği başarısız, tek tek denenecek: %s", exc)
+        return {}
+    prices = {}
+    for item in results:
+        try:
+            meta = item["response"][0]["meta"]
+            prices[item["symbol"]] = Decimal(str(meta["regularMarketPrice"]))
+        except (KeyError, IndexError, TypeError):
+            continue
+    return prices
+
+
 def fetch_stock_and_gold(client: httpx.Client) -> dict[str, Decimal]:
-    prices: dict[str, Decimal] = {}
-    for asset in ASSETS:
-        if asset.type != AssetType.STOCK:
+    stocks = {a.source_id: a.symbol for a in ASSETS if a.type == AssetType.STOCK}
+    wanted = [*stocks, *GOLD_SYMBOLS]
+    quotes = _yahoo_batch(client, wanted)
+
+    for yahoo_symbol in wanted:
+        if yahoo_symbol in quotes:
             continue
         try:
-            prices[asset.symbol] = _yahoo_price(client, asset.source_id)
+            quotes[yahoo_symbol] = _yahoo_price(client, yahoo_symbol)
         except Exception as exc:  # tek bir sembolün hatası diğerlerini engellemesin
-            log.warning("Yahoo fiyatı alınamadı (%s): %s", asset.symbol, exc)
+            log.warning("Yahoo fiyatı alınamadı (%s): %s", yahoo_symbol, exc)
 
-    try:
-        ounce_usd = _yahoo_price(client, "GC=F")
-        usd_try = _yahoo_price(client, "USDTRY=X")
+    prices = {symbol: quotes[ysym] for ysym, symbol in stocks.items() if ysym in quotes}
+    if all(s in quotes for s in GOLD_SYMBOLS):
+        ounce_usd, usd_try = (quotes[s] for s in GOLD_SYMBOLS)
         prices["GRAM"] = ounce_usd * usd_try / TROY_OUNCE_GRAMS
-    except Exception as exc:
-        log.warning("Altın fiyatı alınamadı: %s", exc)
     return prices
 
 

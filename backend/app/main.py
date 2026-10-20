@@ -8,13 +8,18 @@ from app.config import settings
 from app.database import Base, engine
 from app.errors import register_error_handlers
 from app.routers import assets, auth, portfolio, trades
+from app.services.price_service import get_price_service
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     # Şimdilik tablolar açılışta oluşturuluyor; şema değişmeye başlayınca Alembic'e geçilecek.
     Base.metadata.create_all(engine)
+    prices = get_price_service()
+    if settings.price_source == "live":
+        prices.start()  # fiyatlar arka planda yenilenir, istekler dış API'yi beklemez
     yield
+    prices.stop()
 
 
 app = FastAPI(
