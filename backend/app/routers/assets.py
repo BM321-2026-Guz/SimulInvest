@@ -19,6 +19,7 @@ def _to_schema(quote: Quote) -> Asset:
         price=quote.price,
         updated_at=quote.updated_at,
         is_fallback=quote.is_fallback,
+        whole_units=quote.asset.whole_units,
     )
 
 

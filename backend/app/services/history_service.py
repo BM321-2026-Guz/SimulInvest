@@ -19,7 +19,7 @@ import httpx
 
 from app.errors import AppError
 from app.models import AssetType
-from app.services.asset_catalog import ASSETS_BY_SYMBOL
+from app.services.asset_catalog import ASSETS_BY_SYMBOL, AssetInfo
 from app.services.price_providers import HEADERS, TROY_OUNCE_GRAMS, YAHOO_URL
 
 # Aralık → (Yahoo range, nokta aralığı). 5 günde saatlik, diğerlerinde günlük nokta.
@@ -122,7 +122,7 @@ class HistoryService:
             if hit and hit[0] > time.monotonic():
                 return hit[1]
         try:
-            history = self._build(asset.symbol, asset.type, asset.source_id, range_)
+            history = self._build(asset, range_)
         except AppError:
             raise
         except Exception:
@@ -133,14 +133,14 @@ class HistoryService:
             self._cache[key] = (time.monotonic() + self._cache_seconds, history)
         return history
 
-    def _build(self, symbol: str, type_: AssetType, source_id: str, range_: str) -> History:
+    def _build(self, asset: AssetInfo, range_: str) -> History:
+        symbol, type_ = asset.symbol, asset.type
         yahoo_range, interval = RANGES[range_]
-        if type_ == AssetType.STOCK:
-            yahoo_symbol, scale = source_id, Decimal(1)
-        elif type_ == AssetType.CRYPTO:
-            yahoo_symbol, scale = f"{symbol}-USD", Decimal(1)
-        else:  # GOLD: ons (USD) → gram (TL)
-            yahoo_symbol, scale = "GC=F", 1 / TROY_OUNCE_GRAMS
+        yahoo_symbol = asset.chart_symbol  # hisse: THYAO.IS, kripto: BTC-USD, altın: GC=F
+        if type_ == AssetType.GOLD:  # ons (USD) → içerdiği saf altın kadar (TL)
+            scale = asset.gold_grams / TROY_OUNCE_GRAMS
+        else:
+            scale = Decimal(1)
 
         points_series = self._fetch(yahoo_symbol, yahoo_range, interval)
         # Günlük özet her zaman günlük veriden: son gün açılış, bir önceki günün kapanışı.

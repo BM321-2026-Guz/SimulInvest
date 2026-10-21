@@ -343,6 +343,12 @@ components:
             true ise dış kaynaktan hiç fiyat alınamadı ve gösterilen değer demo (yedek) fiyattır.
             Son bilinen gerçek fiyat kullanılıyorsa false olur; fiyatın yaşı updatedAt'ten anlaşılır.
           example: false
+        wholeUnits:
+          type: boolean
+          description: >
+            true ise sadece tam adet alınıp satılır (hisseler ve çeyrek, yarım, tam, Cumhuriyet
+            altını). Kesirli miktar 400 INVALID_QUANTITY döner. Kripto ve gram altında false.
+          example: true
 
     AssetHistory:
       type: object

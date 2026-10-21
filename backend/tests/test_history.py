@@ -121,3 +121,14 @@ def test_empty_series_returns_503(history_client):
     service = HistoryService(lambda *a: Series(times=[]), cache_seconds=0)
     app.dependency_overrides[get_history_service] = lambda: service
     assert history_client.get("/api/assets/THYAO/history").status_code == 503
+
+
+def test_gold_coin_history_uses_its_gold_content(history_client):
+    gram = history_client.get("/api/assets/GRAM/history").json()["points"][-1]["price"]
+    ceyrek = history_client.get("/api/assets/CEYREK/history").json()["points"][-1]["price"]
+    assert abs(ceyrek / gram - 1.6042) < 1e-6
+
+
+def test_crypto_history_uses_its_yahoo_symbol(history_client, yahoo):
+    history_client.get("/api/assets/SUI/history")
+    assert ("SUI20947-USD", "1mo", "1d") in yahoo.calls  # Yahoo'daki sayı ekli sembol

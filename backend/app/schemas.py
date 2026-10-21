@@ -58,6 +58,9 @@ class Asset(ApiModel):
     is_fallback: bool = Field(
         description="True ise dış kaynaktan fiyat alınamadı; gösterilen fiyat demo değeridir."
     )
+    whole_units: bool = Field(
+        description="True ise sadece tam adet alınıp satılır (hisseler, sikke altınlar)."
+    )
 
 
 class PricePoint(ApiModel):

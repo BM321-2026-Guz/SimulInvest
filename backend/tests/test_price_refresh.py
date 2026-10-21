@@ -197,3 +197,16 @@ def test_start_is_idempotent_and_stop_without_start_is_safe():
     service.start(interval=0.01)  # ikinci start yeni thread açmaz
     assert service._thread is thread
     service.stop()
+
+
+def test_gold_coins_are_priced_by_their_pure_gold():
+    calls = []
+    handler = _spark_handler(calls, prices={"GC=F": 4000.0, "USDTRY=X": 40.0})
+    with _client(handler) as client:
+        prices = fetch_gold(client)
+    gram = Decimal("4000.0") * Decimal("40.0") / TROY_OUNCE_GRAMS
+    assert set(prices) == {"GRAM", "CEYREK", "YARIM", "TAM", "CUMHURIYET"}
+    # Çeyrek: 1,75 g × 22/24 = 1,6042 g saf altın
+    assert prices["CEYREK"] == gram * Decimal("1.6042")
+    assert prices["YARIM"] == gram * Decimal("3.2083")
+    assert prices["CUMHURIYET"] > prices["TAM"] > prices["YARIM"] > prices["CEYREK"] > gram

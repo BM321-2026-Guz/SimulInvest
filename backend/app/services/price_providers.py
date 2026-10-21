@@ -91,7 +91,9 @@ def fetch_gold(client: httpx.Client) -> dict[str, Decimal]:
     if not all(s in quotes for s in GOLD_SYMBOLS):
         return {}
     ounce_usd, usd_try = (quotes[s] for s in GOLD_SYMBOLS)
-    return {"GRAM": ounce_usd * usd_try / TROY_OUNCE_GRAMS}
+    gram_try = ounce_usd * usd_try / TROY_OUNCE_GRAMS  # has (24 ayar) gram altın, TL
+    # Çeyrek, yarım, tam, Cumhuriyet: içerdikleri saf altın kadar (işçilik hariç).
+    return {a.symbol: gram_try * a.gold_grams for a in ASSETS if a.type == AssetType.GOLD}
 
 
 def fetch_crypto(client: httpx.Client) -> dict[str, Decimal]:
