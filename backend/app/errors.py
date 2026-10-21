@@ -7,20 +7,27 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 class AppError(Exception):
     """OpenAPI'deki Error şemasına ({code, message}) dönüşen uygulama hatası."""
 
-    def __init__(self, status_code: int, code: str, message: str):
+    def __init__(
+        self, status_code: int, code: str, message: str, headers: dict[str, str] | None = None
+    ):
         self.status_code = status_code
         self.code = code
         self.message = message
+        self.headers = headers
 
 
-def _error(status_code: int, code: str, message: str) -> JSONResponse:
-    return JSONResponse(status_code=status_code, content={"code": code, "message": message})
+def _error(
+    status_code: int, code: str, message: str, headers: dict[str, str] | None = None
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=status_code, content={"code": code, "message": message}, headers=headers
+    )
 
 
 def register_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(AppError)
     async def _app_error(_: Request, exc: AppError):
-        return _error(exc.status_code, exc.code, exc.message)
+        return _error(exc.status_code, exc.code, exc.message, exc.headers)
 
     @app.exception_handler(RequestValidationError)
     async def _validation_error(_: Request, exc: RequestValidationError):

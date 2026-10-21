@@ -16,6 +16,30 @@ def test_list_assets_includes_all_types(client):
     assert thyao["name"] == "Türk Hava Yolları"
 
 
+def test_fallback_flag_marks_demo_prices(client):
+    # Sahte kaynak sadece THYAO ve BTC fiyatı veriyor; diğerleri katalogdaki demo fiyatta.
+    assets = {a["symbol"]: a for a in client.get("/api/assets").json()}
+    assert assets["THYAO"]["isFallback"] is False
+    assert assets["BTC"]["isFallback"] is False
+    assert assets["GARAN"]["isFallback"] is True
+    assert client.get("/api/assets/GARAN").json()["isFallback"] is True
+
+
+def test_last_known_price_is_not_marked_as_fallback():
+    state = {"fail": False}
+
+    def flaky():
+        if state["fail"]:
+            raise RuntimeError("API kapalı")
+        return {"GARAN": Decimal("142.10")}
+
+    service = PriceService(flaky, cache_seconds=0)
+    assert service.get("GARAN").is_fallback is False
+    state["fail"] = True
+    # Gerçek ama eski fiyat: demo değil, yaşı updatedAt alanından anlaşılır.
+    assert service.get("GARAN").is_fallback is False
+
+
 def test_filter_assets_by_type(client):
     assets = client.get("/api/assets", params={"type": "CRYPTO"}).json()
     assert assets and all(a["type"] == "CRYPTO" for a in assets)

@@ -91,6 +91,9 @@ def execute_trade(
 
 
 def build_portfolio(db: Session, user: User, prices: PriceService) -> dict:
+    # Fiyatlar DB'ye dokunmadan önce alınır: dış API yavaşsa kilit tutulmaz (issue #37).
+    quotes = {q.asset.symbol: q for q in prices.get_all()}
+
     wallet = db.scalars(select(Wallet).where(Wallet.user_id == user.id)).one()
     rows = db.scalars(
         select(Holding).where(Holding.user_id == user.id).order_by(Holding.symbol)
@@ -100,7 +103,7 @@ def build_portfolio(db: Session, user: User, prices: PriceService) -> dict:
     holdings = []
     holdings_value = Decimal(0)
     for h in rows:
-        quote = prices.get(h.symbol)
+        quote = quotes.get(h.symbol)
         current = quote.price if quote else h.average_cost
         value = current * h.quantity
         holdings_value += value

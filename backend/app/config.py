@@ -16,9 +16,15 @@ class Settings(BaseSettings):
     jwt_secret: str = Field(min_length=32)
     jwt_algorithm: str = "HS256"
     jwt_expires_seconds: int = 3600
+    # Login deneme sınırı: pencere içinde izin verilen hatalı deneme sayıları.
+    login_max_attempts: int = 5
+    login_max_attempts_per_ip: int = 20
+    login_window_seconds: int = 900
     initial_balance: Decimal = Decimal("100000.00")
     price_source: str = "live"  # live | mock
-    price_cache_seconds: int = 60
+    # Arka planda fiyat yenileme aralığı. CoinGecko verisi ~10-20 sn'de bir güncellendiği için
+    # daha kısası fayda getirmez ve ücretsiz API sınırına (dakikada ~30 istek) yaklaştırır.
+    price_cache_seconds: int = 10
     cors_origins: list[str] = ["http://localhost:5500", "http://127.0.0.1:5500"]
 
 
