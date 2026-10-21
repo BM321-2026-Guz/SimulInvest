@@ -144,13 +144,18 @@ function searchKey(text) {
 
 // Çok varlığı olan gruplar (BIST, ~630 hisse) aranır ve sayfalanır.
 const PAGE_SIZE = 25;
-const market = { query: "", page: 0 };
+const TAB_KEY = "simulinvest-market-tab";
+const market = { query: "", page: 0, tab: storage("get", TAB_KEY) || "STOCK" };
 
 // Kart iskeleti (başlık, arama kutusu, sayfa düğmeleri) bir kez kurulur; 5 sn'lik yenilemede
 // sadece tablo satırları değişir, böylece aramaya yazarken kutu odağını kaybetmez.
 function ensureMarketShell() {
   if ($("#market-groups").dataset.ready) return;
-  $("#market-groups").innerHTML = GROUPS.map((g) => {
+  const tabs = `<div class="tabs market-tabs" role="tablist" id="market-tabs">${GROUPS.map(
+    (g) => `<button class="tab" type="button" role="tab" data-type="${g.type}">${dot(g.type)}${g.short}
+       <span class="tab-count" id="tab-count-${g.type}"></span></button>`
+  ).join("")}</div>`;
+  $("#market-groups").innerHTML = tabs + GROUPS.map((g) => {
     const big = g.type === "STOCK";
     return `<div class="card market-group" data-type="${g.type}" hidden>
       <div class="card-head">
@@ -173,6 +178,14 @@ function ensureMarketShell() {
     </div>`;
   }).join("");
   $("#market-groups").dataset.ready = "1";
+  // BIST · Kripto · Altın sekmeleri: sadece seçili grup gösterilir, seçim tarayıcıda hatırlanır.
+  $("#market-tabs").addEventListener("click", (e) => {
+    const tab = e.target.closest(".tab");
+    if (!tab) return;
+    market.tab = tab.dataset.type;
+    storage("set", TAB_KEY, market.tab);
+    renderMarket();
+  });
   $("#market-search").addEventListener("input", (e) => {
     market.query = e.target.value;
     market.page = 0;
@@ -192,7 +205,11 @@ function renderMarket() {
   for (const g of GROUPS) {
     const all = state.assets.filter((a) => a.type === g.type);
     const card = document.querySelector(`.market-group[data-type="${g.type}"]`);
-    card.hidden = !all.length;
+    card.hidden = !all.length || g.type !== market.tab;
+    $(`#tab-count-${g.type}`).textContent = all.length;
+    document
+      .querySelector(`#market-tabs .tab[data-type="${g.type}"]`)
+      .classList.toggle("active", g.type === market.tab);
     let shown = all;
     if (g.type === "STOCK") {
       const q = searchKey(market.query.trim());
@@ -257,11 +274,11 @@ function selectedSide() {
 // Nakitle alınabilecek en fazla miktar: hissede tam adet, kripto/altında 8 ondalık (aşağı yuvarlanır).
 function maxBuyable(asset, balance) {
   if (!asset || !(asset.price > 0) || !(balance > 0)) return 0;
-  const step = asset.type === "STOCK" ? 1 : 1e-8;
+  const step = asset.wholeUnits ? 1 : 1e-8;
   let qty = Math.floor(balance / asset.price / step) * step;
   // Kayan nokta hatası tutarı bakiyenin üstüne çıkarmasın.
   while (qty > 0 && qty * asset.price > balance) qty -= step;
-  return Number(qty.toFixed(asset.type === "STOCK" ? 0 : 8));
+  return Number(qty.toFixed(asset.wholeUnits ? 0 : 8));
 }
 
 function maxQuantity(asset) {
@@ -294,8 +311,8 @@ function updateEstimate() {
   info.classList.toggle("over", qty > max);
   $("#trade-max").disabled = !max;
 
-  $("#trade-hint").textContent = asset?.type === "STOCK" ? "Hisse adedi tam sayı olmalı." : "";
-  $("#trade-qty").step = asset?.type === "STOCK" ? "1" : "any";
+  $("#trade-hint").textContent = asset?.wholeUnits ? "Bu varlık tam adet alınıp satılır." : "";
+  $("#trade-qty").step = asset?.wholeUnits ? "1" : "any";
 }
 
 async function handleTrade(event) {
@@ -448,6 +465,11 @@ for (const id of ["#market-groups", "#holdings-body"]) {
 
 function selectForTrade(symbol) {
   $("#trade-symbol").value = symbol;
+  const type = state.assets.find((a) => a.symbol === symbol)?.type;
+  if (type && type !== market.tab) {
+    market.tab = type;
+    storage("set", TAB_KEY, type);
+  }
   renderMarket();
   updateEstimate();
   $("#trade-qty").focus();

@@ -394,3 +394,12 @@ body.no-scroll { overflow: hidden; }
   font-size: 13px;
 }
 .pager .btn:disabled { opacity: 0.4; cursor: default; }
+
+/* ---------- Piyasa sekmeleri ve günün haberleri (issue #57) ---------- */
+.market-tabs { margin-bottom: 0; }
+.market-tabs .tab { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.market-tabs .tab .dot { margin-right: 0; }
+.tab-count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.market-tabs .tab.active .tab-count { color: var(--text); }
+.day-news { margin-top: 16px; display: flex; flex-direction: column; min-height: 180px; }
+

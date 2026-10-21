@@ -51,10 +51,23 @@
         <div class="card stat"><span class="muted">Toplam kâr / zarar</span><strong id="stat-pnl">—</strong></div>
       </section>
 
-      <!-- BIST, kripto ve altın ayrı kartlarda; app.js doldurur -->
+      <!-- BIST · Kripto · Altın sekmeleri ve kartları; app.js doldurur -->
       <section class="market" aria-label="Piyasa">
         <div id="market-groups" class="market-groups"></div>
         <p class="muted small-text" id="market-updated"></p>
+
+        <!-- Günün haberleri: içerik GET /api/news (#38) ve YZ analizi (#13) ile gelecek -->
+        <section class="card day-news">
+          <div class="card-head">
+            <h2>Günün haberleri</h2>
+            <span class="badge soon">Yakında</span>
+          </div>
+          <div class="placeholder">
+            <p><strong>Henüz haber yok.</strong></p>
+            <p class="muted">Günün öne çıkan finans haberleri, YZ'nin Yükseliş / Düşüş etiketiyle
+              burada listelenecek.</p>
+          </div>
+        </section>
       </section>
 
       <!-- Sarmalayıcı piyasa sütunu kadar uzar; form bu alan içinde yapışık (sticky) kalır -->
