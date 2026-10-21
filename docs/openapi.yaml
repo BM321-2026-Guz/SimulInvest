@@ -144,6 +144,47 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /api/assets/{symbol}/history:
+    get:
+      tags: [Market]
+      summary: Varlığın fiyat geçmişi ve günlük özeti (ayrıntı panosu, issue #49).
+      description: >
+        Grafik için kapanış fiyatları ile son işlem gününün açılış, bir önceki günün kapanış,
+        gün içi en düşük ve en yüksek değerleri. Kaynak Yahoo Finance; 60 sn önbellek.
+        Kripto ve altın USD fiyatından o günün dolar/TL kuruyla TL'ye çevrilir.
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          schema:
+            type: string
+            example: THYAO
+        - name: range
+          in: query
+          required: false
+          description: 5d = son 5 gün (saatlik), 1mo = son 1 ay (günlük), 3mo = son 3 ay (günlük).
+          schema:
+            type: string
+            enum: ['5d', '1mo', '3mo']
+            default: 1mo
+      responses:
+        '200':
+          description: Fiyat geçmişi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetHistory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '503':
+          description: Dış fiyat kaynağına ulaşılamıyor (HISTORY_UNAVAILABLE).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /api/trades:
     post:
       tags: [Trade]
@@ -302,6 +343,53 @@ components:
             true ise dış kaynaktan hiç fiyat alınamadı ve gösterilen değer demo (yedek) fiyattır.
             Son bilinen gerçek fiyat kullanılıyorsa false olur; fiyatın yaşı updatedAt'ten anlaşılır.
           example: false
+        wholeUnits:
+          type: boolean
+          description: >
+            true ise sadece tam adet alınıp satılır (hisseler ve çeyrek, yarım, tam, Cumhuriyet
+            altını). Kesirli miktar 400 INVALID_QUANTITY döner. Kripto ve gram altında false.
+          example: true
+
+    AssetHistory:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: THYAO
+        range:
+          type: string
+          enum: ['5d', '1mo', '3mo']
+        open:
+          type: number
+          nullable: true
+          description: Son işlem gününün açılış fiyatı (TL).
+          example: 273.00
+        previousClose:
+          type: number
+          nullable: true
+          description: Bir önceki işlem gününün kapanışı (TL).
+          example: 276.75
+        dayLow:
+          type: number
+          nullable: true
+          description: Gün içi en düşük (TL).
+          example: 270.75
+        dayHigh:
+          type: number
+          nullable: true
+          description: Gün içi en yüksek (TL).
+          example: 274.75
+        points:
+          type: array
+          items:
+            type: object
+            properties:
+              time:
+                type: string
+                format: date-time
+              price:
+                type: number
+                description: Kapanış fiyatı (TL).
 
     Holding:
       type: object

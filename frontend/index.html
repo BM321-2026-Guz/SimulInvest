@@ -51,10 +51,23 @@
         <div class="card stat"><span class="muted">Toplam kâr / zarar</span><strong id="stat-pnl">—</strong></div>
       </section>
 
-      <!-- BIST, kripto ve altın ayrı kartlarda; app.js doldurur -->
+      <!-- BIST · Kripto · Altın sekmeleri ve kartları; app.js doldurur -->
       <section class="market" aria-label="Piyasa">
         <div id="market-groups" class="market-groups"></div>
         <p class="muted small-text" id="market-updated"></p>
+
+        <!-- Günün haberleri: içerik GET /api/news (#38) ve YZ analizi (#13) ile gelecek -->
+        <section class="card day-news">
+          <div class="card-head">
+            <h2>Günün haberleri</h2>
+            <span class="badge soon">Yakında</span>
+          </div>
+          <div class="placeholder">
+            <p><strong>Henüz haber yok.</strong></p>
+            <p class="muted">Günün öne çıkan finans haberleri, YZ'nin Yükseliş / Düşüş etiketiyle
+              burada listelenecek.</p>
+          </div>
+        </section>
       </section>
 
       <!-- Sarmalayıcı piyasa sütunu kadar uzar; form bu alan içinde yapışık (sticky) kalır -->
@@ -63,7 +76,9 @@
         <h2>Al / Sat</h2>
         <form id="trade-form">
           <label>Varlık
-            <select name="symbol" id="trade-symbol" required></select>
+            <input name="symbol" id="trade-symbol" list="symbol-list" autocomplete="off" required
+                   placeholder="Sembol ya da ad yaz (ör. THYAO)">
+            <datalist id="symbol-list"></datalist>
           </label>
           <div class="side-toggle">
             <input type="radio" name="side" id="side-buy" value="BUY" checked>
@@ -117,6 +132,90 @@
     </main>
 
     <footer class="footer muted">Bu bir simülasyondur, yatırım tavsiyesi değildir.</footer>
+  </div>
+
+  <!-- Varlık ayrıntı panosu (issue #49): bir varlığa tıklanınca açılır -->
+  <div id="detail" class="detail-backdrop" hidden>
+    <div class="detail" role="dialog" aria-modal="true" aria-labelledby="detail-symbol">
+      <button id="detail-prev" class="detail-nav" type="button">
+        <span aria-hidden="true">▲</span> Önceki: <strong id="detail-prev-label"></strong>
+      </button>
+
+      <div class="detail-body">
+        <div class="detail-col">
+          <section class="card detail-head">
+            <div>
+              <div class="detail-title">
+                <span id="detail-dot"></span>
+                <h2 id="detail-symbol"></h2>
+                <span id="detail-type" class="badge"></span>
+              </div>
+              <p id="detail-name" class="muted"></p>
+            </div>
+            <div class="detail-price">
+              <strong id="detail-price"></strong>
+              <span id="detail-change"></span>
+            </div>
+            <div class="detail-actions">
+              <button id="detail-trade" class="btn primary small" type="button">Al / Sat</button>
+              <button id="detail-close" class="btn ghost small" type="button" aria-label="Panoyu kapat">✕</button>
+            </div>
+          </section>
+
+          <section class="card detail-news">
+            <div class="card-head">
+              <h3>Haberler</h3>
+              <div class="tabs small" id="news-tabs" role="tablist">
+                <button class="tab active" data-filter="all" type="button">Tümü</button>
+                <button class="tab" data-filter="up" type="button">Yükseliş</button>
+                <button class="tab" data-filter="down" type="button">Düşüş</button>
+              </div>
+            </div>
+            <div class="placeholder" id="news-empty">
+              <p><strong>Henüz haber yok.</strong></p>
+              <p class="muted">Bu varlıkla ilgili haberler, haber servisi hazır olunca burada YZ duygu
+                etiketiyle (Yükseliş / Düşüş) listelenecek.</p>
+            </div>
+          </section>
+        </div>
+
+        <div class="detail-col">
+          <section class="card detail-chart">
+            <div class="card-head">
+              <h3>Fiyat grafiği</h3>
+              <div class="tabs small" id="range-tabs" role="tablist">
+                <button class="tab" data-range="5d" type="button">5G</button>
+                <button class="tab active" data-range="1mo" type="button">1A</button>
+                <button class="tab" data-range="3mo" type="button">3A</button>
+              </div>
+            </div>
+            <div class="chart-box" id="chart-box"></div>
+          </section>
+
+          <section class="card detail-stats">
+            <div class="stat-item"><span class="muted">Açılış</span><strong id="stat-open">—</strong></div>
+            <div class="stat-item"><span class="muted">Önceki kapanış</span><strong id="stat-prev">—</strong></div>
+            <div class="stat-item"><span class="muted">Gün içi en düşük</span><strong id="stat-low">—</strong></div>
+            <div class="stat-item"><span class="muted">Gün içi en yüksek</span><strong id="stat-high">—</strong></div>
+          </section>
+
+          <section class="card detail-ai">
+            <div class="card-head">
+              <h3>YZ analizi</h3>
+              <span class="badge soon">Yakında</span>
+            </div>
+            <div class="placeholder">
+              <p class="muted">Bu bölümde varlığa ait haberlerin ve fiyat hareketinin yapay zeka ile
+                yorumlanmış özeti yer alacak.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <button id="detail-next" class="detail-nav" type="button">
+        <span aria-hidden="true">▼</span> Sonraki: <strong id="detail-next-label"></strong>
+      </button>
+    </div>
   </div>
 
   <script src="app.js"></script>

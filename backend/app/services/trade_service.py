@@ -25,8 +25,10 @@ def create_wallet(db: Session, user: User) -> Wallet:
 
 
 def _validate_quantity(quote: Quote, quantity: Decimal) -> None:
-    if quote.asset.type == AssetType.STOCK and quantity != quantity.to_integral_value():
-        raise AppError(400, "INVALID_QUANTITY", "Hisse senedi adedi tam sayı olmalıdır.")
+    # Hisseler ve sikke altınlar (çeyrek, yarım, tam, Cumhuriyet) bölünemez.
+    if quote.asset.whole_units and quantity != quantity.to_integral_value():
+        what = "Hisse senedi" if quote.asset.type == AssetType.STOCK else quote.asset.name
+        raise AppError(400, "INVALID_QUANTITY", f"{what} adedi tam sayı olmalıdır.")
 
 
 def execute_trade(

@@ -137,3 +137,13 @@ def test_users_cannot_see_each_others_data(client, auth_headers):
 def test_created_at_is_utc(client, auth_headers):
     created = trade(client, auth_headers, "THYAO", "BUY", 1).json()["createdAt"]
     assert created.endswith(("Z", "+00:00"))
+
+
+def test_gold_coins_trade_in_whole_units_only(client, auth_headers):
+    response = trade(client, auth_headers, "CEYREK", "BUY", 1.5)
+    assert response.status_code == 400
+    assert response.json()["code"] == "INVALID_QUANTITY"
+    assert "Çeyrek Altın" in response.json()["message"]
+    assert trade(client, auth_headers, "CEYREK", "BUY", 2).status_code == 201
+    # gram altın kesirli alınabilir
+    assert trade(client, auth_headers, "GRAM", "BUY", 1.25).status_code == 201

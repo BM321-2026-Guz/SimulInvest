@@ -15,6 +15,10 @@ const tl = new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }
 const qtyFmt = new Intl.NumberFormat("tr-TR", { maximumFractionDigits: 8 });
 const dateFmt = new Intl.DateTimeFormat("tr-TR", { dateStyle: "short", timeStyle: "short" });
 const timeFmt = new Intl.DateTimeFormat("tr-TR", { timeStyle: "medium" }); // saniyeli
+const pct = new Intl.NumberFormat("tr-TR", {
+  style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2,
+});
+const compact = new Intl.NumberFormat("tr-TR", { notation: "compact", maximumFractionDigits: 2 });
 
 const state = { assets: [], authMode: "login", portfolio: null };
 
@@ -126,58 +130,141 @@ async function loadAssets() {
     renderSymbolOptions();
     const latest = state.assets.map((a) => new Date(a.updatedAt)).sort((a, b) => b - a)[0];
     $("#market-updated").textContent = latest ? `Son güncelleme: ${timeFmt.format(latest)}` : "";
+    if (detail.symbol) renderDetailHead(); // pano açıksa güncel fiyat orada da yenilensin
   } catch (err) {
     $("#market-groups").innerHTML = `<div class="card empty">${escapeHtml(err.message)}</div>`;
   }
 }
 
-function renderMarket() {
-  const selected = $("#trade-symbol").value;
-  $("#market-groups").innerHTML = GROUPS.map((g) => {
-    const assets = state.assets.filter((a) => a.type === g.type);
-    if (!assets.length) return "";
-    const rows = assets
-      .map(
-        (a) => `<tr data-symbol="${a.symbol}" class="${a.symbol === selected ? "selected" : ""}">
-          <td><span class="sym">${a.symbol}</span></td>
-          <td>${escapeHtml(a.name)}</td>
-          <td class="num">${tl.format(a.price)}${
-            a.isFallback
-              ? ' <span class="badge demo" title="Canlı fiyat alınamadı, demo fiyat gösteriliyor">demo</span>'
-              : ""
-          }</td>
-        </tr>`
-      )
-      .join("");
-    return `<div class="card market-group">
-      <div class="card-head"><h2>${dot(g.type)}${g.title}</h2><span class="muted">${assets.length} varlık</span></div>
+// Türkçe karakterlere duyarsız arama: "turkiye" de "Türkiye"yi, "isbank" da "İş Bank"ı bulsun.
+const TR_ASCII = { ç: "c", ğ: "g", ı: "i", i̇: "i", ö: "o", ş: "s", ü: "u" };
+function searchKey(text) {
+  return text.toLocaleLowerCase("tr").replace(/[çğıöşü]|i̇/g, (ch) => TR_ASCII[ch] ?? ch);
+}
+
+// Çok varlığı olan gruplar (BIST, ~630 hisse) aranır ve sayfalanır.
+const PAGE_SIZE = 25;
+const TAB_KEY = "simulinvest-market-tab";
+const market = { query: "", page: 0, tab: storage("get", TAB_KEY) || "STOCK" };
+
+// Kart iskeleti (başlık, arama kutusu, sayfa düğmeleri) bir kez kurulur; 5 sn'lik yenilemede
+// sadece tablo satırları değişir, böylece aramaya yazarken kutu odağını kaybetmez.
+function ensureMarketShell() {
+  if ($("#market-groups").dataset.ready) return;
+  const tabs = `<div class="tabs market-tabs" role="tablist" id="market-tabs">${GROUPS.map(
+    (g) => `<button class="tab" type="button" role="tab" data-type="${g.type}">${dot(g.type)}${g.short}
+       <span class="tab-count" id="tab-count-${g.type}"></span></button>`
+  ).join("")}</div>`;
+  $("#market-groups").innerHTML = tabs + GROUPS.map((g) => {
+    const big = g.type === "STOCK";
+    return `<div class="card market-group" data-type="${g.type}" hidden>
+      <div class="card-head">
+        <h2>${dot(g.type)}${g.title}</h2>
+        <span class="muted" id="count-${g.type}"></span>
+      </div>
+      ${big ? `<input type="search" id="market-search" class="market-search"
+                 placeholder="Hisse ara: sembol ya da şirket adı" aria-label="Hisse ara">` : ""}
       <div class="table-wrap">
         <table>
           <thead><tr><th>Sembol</th><th>Ad</th><th class="num">Fiyat</th></tr></thead>
-          <tbody>${rows}</tbody>
+          <tbody id="rows-${g.type}"></tbody>
         </table>
       </div>
+      ${big ? `<div class="pager" id="pager">
+                 <button class="btn ghost small" type="button" data-step="-1">‹ Önceki</button>
+                 <span class="muted" id="pager-label"></span>
+                 <button class="btn ghost small" type="button" data-step="1">Sonraki ›</button>
+               </div>` : ""}
     </div>`;
   }).join("");
+  $("#market-groups").dataset.ready = "1";
+  // BIST · Kripto · Altın sekmeleri: sadece seçili grup gösterilir, seçim tarayıcıda hatırlanır.
+  $("#market-tabs").addEventListener("click", (e) => {
+    const tab = e.target.closest(".tab");
+    if (!tab) return;
+    market.tab = tab.dataset.type;
+    storage("set", TAB_KEY, market.tab);
+    renderMarket();
+  });
+  $("#market-search").addEventListener("input", (e) => {
+    market.query = e.target.value;
+    market.page = 0;
+    renderMarket();
+  });
+  $("#pager").addEventListener("click", (e) => {
+    const step = Number(e.target.closest("button")?.dataset.step || 0);
+    if (!step) return;
+    market.page += step;
+    renderMarket();
+  });
 }
 
+function renderMarket() {
+  ensureMarketShell();
+  const selected = selectedAsset()?.symbol;
+  for (const g of GROUPS) {
+    const all = state.assets.filter((a) => a.type === g.type);
+    const card = document.querySelector(`.market-group[data-type="${g.type}"]`);
+    card.hidden = !all.length || g.type !== market.tab;
+    $(`#tab-count-${g.type}`).textContent = all.length;
+    document
+      .querySelector(`#market-tabs .tab[data-type="${g.type}"]`)
+      .classList.toggle("active", g.type === market.tab);
+    let shown = all;
+    if (g.type === "STOCK") {
+      const q = searchKey(market.query.trim());
+      const matches = q
+        ? all.filter((a) => searchKey(a.symbol).includes(q) || searchKey(a.name).includes(q))
+        : all;
+      const pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
+      market.page = Math.min(Math.max(market.page, 0), pages - 1);
+      shown = matches.slice(market.page * PAGE_SIZE, (market.page + 1) * PAGE_SIZE);
+      $(`#count-${g.type}`).textContent = q
+        ? `${matches.length} / ${all.length} hisse`
+        : `${all.length} hisse`;
+      $("#pager-label").textContent = `Sayfa ${market.page + 1} / ${pages}`;
+      $("#pager").hidden = pages < 2;
+      $('#pager [data-step="-1"]').disabled = market.page === 0;
+      $('#pager [data-step="1"]').disabled = market.page >= pages - 1;
+    } else {
+      $(`#count-${g.type}`).textContent = `${all.length} varlık`;
+    }
+    $(`#rows-${g.type}`).innerHTML =
+      shown
+        .map(
+          (a) => `<tr data-symbol="${a.symbol}" class="${a.symbol === selected ? "selected" : ""}">
+            <td><span class="sym">${a.symbol}</span></td>
+            <td>${escapeHtml(a.name)}</td>
+            <td class="num">${tl.format(a.price)}</td>
+          </tr>`
+        )
+        .join("") || `<tr><td colspan="3" class="empty">"${escapeHtml(market.query)}" ile eşleşen hisse yok.</td></tr>`;
+  }
+}
+
+// Al-sat kutusunun öneri listesi; ~630 seçenek her 5 sn'de yeniden yazılmasın diye sadece
+// varlık listesi değişince güncellenir.
+let symbolListKey = "";
 function renderSymbolOptions() {
-  const select = $("#trade-symbol");
-  const current = select.value;
-  select.innerHTML = GROUPS.map((g) => {
-    const options = state.assets
-      .filter((a) => a.type === g.type)
-      .map((a) => `<option value="${a.symbol}">${a.symbol} · ${escapeHtml(a.name)}</option>`)
+  const key = state.assets.map((a) => a.symbol).join(",");
+  if (key !== symbolListKey) {
+    symbolListKey = key;
+    $("#symbol-list").innerHTML = state.assets
+      .map((a) => `<option value="${a.symbol}">${escapeHtml(a.name)} · ${TYPE_LABELS[a.type]}</option>`)
       .join("");
-    return options ? `<optgroup label="${g.title}">${options}</optgroup>` : "";
-  }).join("");
-  if (current) select.value = current;
+  }
   updateEstimate();
 }
 
 // ---------- al / sat ----------
+// Kutuya "thyao" ya da "THYAO · Türk Hava Yolları" yazılsa da sembol olarak okunur.
+function typedSymbol() {
+  return $("#trade-symbol").value.split("·")[0].trim().toUpperCase(); // semboller ASCII; "tr" yerelinde i → İ olurdu
+}
+
 function selectedAsset() {
-  return state.assets.find((a) => a.symbol === $("#trade-symbol").value);
+  const symbol = typedSymbol();
+  return state.assets.find((a) => a.symbol === symbol);
 }
 
 function selectedSide() {
@@ -187,11 +274,11 @@ function selectedSide() {
 // Nakitle alınabilecek en fazla miktar: hissede tam adet, kripto/altında 8 ondalık (aşağı yuvarlanır).
 function maxBuyable(asset, balance) {
   if (!asset || !(asset.price > 0) || !(balance > 0)) return 0;
-  const step = asset.type === "STOCK" ? 1 : 1e-8;
+  const step = asset.wholeUnits ? 1 : 1e-8;
   let qty = Math.floor(balance / asset.price / step) * step;
   // Kayan nokta hatası tutarı bakiyenin üstüne çıkarmasın.
   while (qty > 0 && qty * asset.price > balance) qty -= step;
-  return Number(qty.toFixed(asset.type === "STOCK" ? 0 : 8));
+  return Number(qty.toFixed(asset.wholeUnits ? 0 : 8));
 }
 
 function maxQuantity(asset) {
@@ -224,18 +311,25 @@ function updateEstimate() {
   info.classList.toggle("over", qty > max);
   $("#trade-max").disabled = !max;
 
-  $("#trade-hint").textContent = asset?.type === "STOCK" ? "Hisse adedi tam sayı olmalı." : "";
-  $("#trade-qty").step = asset?.type === "STOCK" ? "1" : "any";
+  $("#trade-hint").textContent = asset?.wholeUnits ? "Bu varlık tam adet alınıp satılır." : "";
+  $("#trade-qty").step = asset?.wholeUnits ? "1" : "any";
 }
 
 async function handleTrade(event) {
   event.preventDefault();
   const form = new FormData(event.target);
   const body = {
-    symbol: form.get("symbol"),
+    symbol: typedSymbol(),
     side: form.get("side"),
     quantity: Number(form.get("quantity")),
   };
+  if (!selectedAsset()) {
+    const msg = $("#trade-msg");
+    msg.textContent = `"${$("#trade-symbol").value}" listede yok. Öneri listesinden bir varlık seç.`;
+    msg.className = "msg fail";
+    msg.hidden = false;
+    return;
+  }
   const msg = $("#trade-msg");
   const button = $("#trade-submit");
   button.disabled = true;
@@ -292,7 +386,7 @@ async function loadPortfolio() {
           </tr>` +
           g.items
             .map(
-              (h) => `<tr>
+              (h) => `<tr data-symbol="${h.symbol}" class="clickable">
                 <td><span class="sym">${h.symbol}</span></td>
                 <td class="num">${qtyFmt.format(h.quantity)}</td>
                 <td class="num">${tl.format(h.averageCost)}</td>
@@ -345,7 +439,7 @@ document.querySelectorAll("#auth-view .tab").forEach((t) =>
 $("#auth-form").addEventListener("submit", handleAuth);
 $("#logout").addEventListener("click", logout);
 $("#trade-form").addEventListener("submit", handleTrade);
-$("#trade-symbol").addEventListener("change", () => {
+$("#trade-symbol").addEventListener("input", () => {
   updateEstimate();
   renderMarket();
 });
@@ -361,13 +455,204 @@ $("#trade-max").addEventListener("click", () => {
   $("#trade-qty").focus();
 });
 
-$("#market-groups").addEventListener("click", (e) => {
-  const row = e.target.closest("tr[data-symbol]");
-  if (!row) return;
-  $("#trade-symbol").value = row.dataset.symbol;
+// Piyasada veya portföyde bir varlığa tıklanınca ayrıntı panosu açılır.
+for (const id of ["#market-groups", "#holdings-body"]) {
+  $(id).addEventListener("click", (e) => {
+    const row = e.target.closest("tr[data-symbol]");
+    if (row) openDetail(row.dataset.symbol);
+  });
+}
+
+function selectForTrade(symbol) {
+  $("#trade-symbol").value = symbol;
+  const type = state.assets.find((a) => a.symbol === symbol)?.type;
+  if (type && type !== market.tab) {
+    market.tab = type;
+    storage("set", TAB_KEY, type);
+  }
   renderMarket();
   updateEstimate();
   $("#trade-qty").focus();
+}
+
+// ---------- varlık ayrıntı panosu (issue #49) ----------
+const detail = { symbol: null, range: "1mo", history: null, request: 0, opener: null };
+const shortDate = new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short" });
+const shortTime = new Intl.DateTimeFormat("tr-TR", {
+  day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
+});
+
+// Aynı gruptaki (hisse / kripto / altın) önceki ve sonraki varlık; uçlarda başa sarar.
+function neighbours(symbol) {
+  const asset = state.assets.find((a) => a.symbol === symbol);
+  const list = state.assets.filter((a) => a.type === asset?.type);
+  const i = list.findIndex((a) => a.symbol === symbol);
+  return { prev: list[(i - 1 + list.length) % list.length], next: list[(i + 1) % list.length] };
+}
+
+function openDetail(symbol) {
+  if (!state.assets.some((a) => a.symbol === symbol)) return;
+  if ($("#detail").hidden) detail.opener = document.activeElement;
+  detail.symbol = symbol;
+  detail.history = null;
+  $("#detail").hidden = false;
+  document.body.classList.add("no-scroll");
+  renderDetailHead();
+  loadPriceHistory();
+  $("#detail-close").focus();
+}
+
+function closeDetail() {
+  $("#detail").hidden = true;
+  document.body.classList.remove("no-scroll");
+  detail.symbol = null;
+  detail.opener?.focus?.();
+}
+
+function renderDetailHead() {
+  const a = state.assets.find((x) => x.symbol === detail.symbol);
+  if (!a) return;
+  $("#detail-dot").innerHTML = dot(a.type);
+  $("#detail-symbol").textContent = a.symbol;
+  $("#detail-type").textContent = TYPE_LABELS[a.type];
+  $("#detail-name").textContent = a.name;
+  $("#detail-price").textContent = tl.format(a.price);
+
+  const prev = detail.history?.previousClose;
+  const change = $("#detail-change");
+  if (prev) {
+    const diff = a.price - prev;
+    change.textContent = `${diff >= 0 ? "+" : ""}${pct.format(diff / prev)} (${signed(diff)})`;
+    change.className = pnlClass(diff);
+  } else {
+    change.textContent = "";
+  }
+
+  // Grupta tek varlık varsa (altın) gezinecek başka varlık yok; çubuklar gizlenir.
+  const { prev: p, next: n } = neighbours(a.symbol);
+  const alone = p.symbol === a.symbol;
+  $("#detail-prev").hidden = alone;
+  $("#detail-next").hidden = alone;
+  $("#detail-prev-label").textContent = `${p.symbol} · ${p.name}`;
+  $("#detail-next-label").textContent = `${n.symbol} · ${n.name}`;
+}
+
+async function loadPriceHistory() {
+  const symbol = detail.symbol;
+  const range = detail.range;
+  const request = ++detail.request; // hızlı geçişte eski cevap yenisinin üstüne yazmasın
+  for (const id of ["#stat-open", "#stat-prev", "#stat-low", "#stat-high"]) $(id).textContent = "—";
+  $("#chart-box").innerHTML = '<p class="muted chart-msg">Grafik yükleniyor…</p>';
+  try {
+    const h = await api(`/api/assets/${encodeURIComponent(symbol)}/history?range=${range}`, {
+      auth: false,
+    });
+    if (request !== detail.request) return;
+    detail.history = h;
+    $("#stat-open").textContent = h.open == null ? "—" : tl.format(h.open);
+    $("#stat-prev").textContent = h.previousClose == null ? "—" : tl.format(h.previousClose);
+    $("#stat-low").textContent = h.dayLow == null ? "—" : tl.format(h.dayLow);
+    $("#stat-high").textContent = h.dayHigh == null ? "—" : tl.format(h.dayHigh);
+    renderChart(h.points, range);
+    renderDetailHead();
+  } catch (err) {
+    if (request !== detail.request) return;
+    $("#chart-box").innerHTML = `<p class="muted chart-msg">${escapeHtml(err.message)}</p>`;
+  }
+}
+
+// Bağımlılıksız SVG çizgi grafik: alan dolgusu, min/max ekseni, üzerine gelince fiyat.
+function renderChart(points, range) {
+  const box = $("#chart-box");
+  if (points.length < 2) {
+    box.innerHTML = '<p class="muted chart-msg">Bu aralık için yeterli veri yok.</p>';
+    return;
+  }
+  const W = 600, H = 240, L = 8, R = 72, T = 12, B = 26;
+  const prices = points.map((p) => p.price);
+  const min = Math.min(...prices), max = Math.max(...prices);
+  const span = max - min || max * 0.01 || 1;
+  const x = (i) => L + (i / (points.length - 1)) * (W - L - R);
+  const y = (v) => T + (1 - (v - min) / span) * (H - T - B);
+  const line = points.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p.price).toFixed(1)}`).join("");
+  const area = `${line}L${x(points.length - 1).toFixed(1)},${H - B}L${x(0).toFixed(1)},${H - B}Z`;
+  const tone = prices.at(-1) >= prices[0] ? "up" : "down";
+  const fmtX = range === "5d" ? shortTime : shortDate;
+  const ticks = [min, (min + max) / 2, max];
+
+  box.innerHTML = `
+    <svg class="chart ${tone}" viewBox="0 0 ${W} ${H}" role="img"
+         aria-label="${escapeHtml(detail.symbol)} fiyat grafiği: ${tl.format(prices[0])} → ${tl.format(prices.at(-1))}">
+      ${ticks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>
+        <text class="axis" x="${W - R + 6}" y="${y(v) + 4}">${compact.format(v)}</text>`).join("")}
+      <path class="area" d="${area}"/>
+      <path class="line" d="${line}"/>
+      <text class="axis" x="${L}" y="${H - 6}">${fmtX.format(new Date(points[0].time))}</text>
+      <text class="axis" x="${W - R}" y="${H - 6}" text-anchor="end">${fmtX.format(new Date(points.at(-1).time))}</text>
+      <g class="hover" visibility="hidden">
+        <line class="cursor" y1="${T}" y2="${H - B}"/>
+        <circle r="4"/>
+      </g>
+      <rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H}"/>
+    </svg>
+    <div class="chart-tip" hidden></div>`;
+
+  const svg = box.querySelector("svg");
+  const hover = svg.querySelector(".hover");
+  const tip = box.querySelector(".chart-tip");
+  svg.querySelector(".hit").addEventListener("mousemove", (e) => {
+    const rect = svg.getBoundingClientRect();
+    const vx = ((e.clientX - rect.left) / rect.width) * W;
+    const i = Math.max(0, Math.min(points.length - 1, Math.round(((vx - L) / (W - L - R)) * (points.length - 1))));
+    const px = x(i), py = y(points[i].price);
+    hover.setAttribute("visibility", "visible");
+    hover.querySelector("line").setAttribute("x1", px);
+    hover.querySelector("line").setAttribute("x2", px);
+    hover.querySelector("circle").setAttribute("cx", px);
+    hover.querySelector("circle").setAttribute("cy", py);
+    tip.hidden = false;
+    tip.innerHTML = `<strong>${tl.format(points[i].price)}</strong><span>${fmtX.format(new Date(points[i].time))}</span>`;
+    const left = (px / W) * rect.width;
+    tip.style.left = `${Math.min(Math.max(left, 60), rect.width - 60)}px`;
+  });
+  svg.querySelector(".hit").addEventListener("mouseleave", () => {
+    hover.setAttribute("visibility", "hidden");
+    tip.hidden = true;
+  });
+}
+
+$("#detail-close").addEventListener("click", closeDetail);
+$("#detail").addEventListener("click", (e) => {
+  if (e.target === $("#detail")) closeDetail(); // panonun dışına tıklanınca kapanır
+});
+$("#detail-prev").addEventListener("click", () => openDetail(neighbours(detail.symbol).prev.symbol));
+$("#detail-next").addEventListener("click", () => openDetail(neighbours(detail.symbol).next.symbol));
+$("#detail-trade").addEventListener("click", () => {
+  const symbol = detail.symbol;
+  closeDetail();
+  selectForTrade(symbol);
+});
+$("#range-tabs").addEventListener("click", (e) => {
+  const tab = e.target.closest(".tab");
+  if (!tab || tab.dataset.range === detail.range) return;
+  detail.range = tab.dataset.range;
+  document.querySelectorAll("#range-tabs .tab").forEach((t) => t.classList.toggle("active", t === tab));
+  loadPriceHistory();
+});
+// Haber menüsü hazır; içerik GET /api/news (#38) gelince bu filtreye göre listelenecek.
+$("#news-tabs").addEventListener("click", (e) => {
+  const tab = e.target.closest(".tab");
+  if (!tab) return;
+  document.querySelectorAll("#news-tabs .tab").forEach((t) => t.classList.toggle("active", t === tab));
+});
+document.addEventListener("keydown", (e) => {
+  if ($("#detail").hidden) return;
+  if (e.key === "Escape") closeDetail();
+  else if ($("#detail-prev").hidden) return;
+  else if (e.key === "ArrowUp") openDetail(neighbours(detail.symbol).prev.symbol);
+  else if (e.key === "ArrowDown") openDetail(neighbours(detail.symbol).next.symbol);
+  else return;
+  e.preventDefault();
 });
 
 // Backend fiyatları arka planda 10 sn'de bir yeniliyor; 5 sn'de bir sormak en fazla ~15 sn gecikme

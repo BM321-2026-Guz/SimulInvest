@@ -88,3 +88,20 @@ def test_prices_are_cached():
     service.get_all()
     service.get("THYAO")
     assert len(calls) == 1
+
+
+def test_market_has_30_coins_and_5_gold_types(client):
+    assets = client.get("/api/assets").json()
+    by_type = {}
+    for a in assets:
+        by_type.setdefault(a["type"], []).append(a["symbol"])
+    assert len(by_type["CRYPTO"]) == 30
+    assert by_type["GOLD"] == ["GRAM", "CEYREK", "YARIM", "TAM", "CUMHURIYET"]
+
+
+def test_whole_units_flag(client):
+    assets = {a["symbol"]: a for a in client.get("/api/assets").json()}
+    assert assets["THYAO"]["wholeUnits"] is True
+    assert assets["CEYREK"]["wholeUnits"] is True
+    assert assets["GRAM"]["wholeUnits"] is False
+    assert assets["BTC"]["wholeUnits"] is False
