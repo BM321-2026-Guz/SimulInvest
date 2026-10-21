@@ -71,6 +71,14 @@ CI (`.github/workflows/backend-ci.yml`) her PR'da ruff, pytest ve en az %50 kaps
   `/api/assets` yanıtında `isFallback: true` ile işaretlenir; son bilinen gerçek fiyatta bu alan
   `false` kalır ve fiyatın ne kadar eski olduğu `updatedAt` alanından anlaşılır.
 - Fiyat kaynakları: BIST ve altın için Yahoo Finance, kripto için CoinGecko (anahtarsız uç noktalar).
+- **BIST hisse listesi** (`app/data/bist_stocks.csv`, ~630 hisse): Yahoo Finance'te fiyatı olan
+  bütün BIST hisseleri, piyasa değerine göre sıralı. Liste `scripts/update_bist_list.py` ile
+  üretilir; betik fiyatı gelmeyen, 30 günden uzun süredir işlem görmeyen ve fiyatı başlangıç
+  bakiyesini aşan hisseleri dışarıda bırakır. Yeni halka arzlar için ayda bir çalıştırıp
+  değişikliği PR ile gönderin: `.venv\Scripts\python.exe scripts\update_bist_list.py`
+- Hisseler 20'şerli paketlerle paralel çekilir (Yahoo tek istekte en fazla 20 sembol kabul ediyor)
+  ve `STOCK_REFRESH_SECONDS` (varsayılan 60 sn) aralıkla yenilenir; kripto ve altın her turda
+  (10 sn). BIST verisi Yahoo'da zaten ~16 dk gecikmeli olduğu için daha sık çekmek fayda getirmez.
 - Login deneme sınırı: aynı IP'den aynı e-postaya 15 dakikada 5, bir IP'den toplam 20 hatalı
   deneme sonrası `429 TOO_MANY_ATTEMPTS` ve `Retry-After` başlığı döner. Sayaçlar bellekte
   tutulur, uygulama yeniden başlayınca sıfırlanır. Sınırlar `.env` ile değiştirilebilir:
