@@ -1,0 +1,628 @@
+rank,symbol,name,reference_price,last_trade
+1,ASELS,Aselsan,345,2026-10-21
+2,QNBTR,QNB Bank,129.7,2026-10-21
+3,TUPRS,Tüpraş,359.25,2026-10-21
+4,GARAN,Garanti BBVA,132.8,2026-10-21
+5,KCHOL,Koç Holding,203.9,2026-10-21
+6,BIMAS,BİM Mağazalar,385.25,2026-10-21
+7,ENKAI,Enka İnşaat,75.55,2026-10-21
+8,ENPRA,Enpara Bank,34,2026-10-21
+9,THYAO,Türk Hava Yolları,267.75,2026-10-21
+10,AKBNK,Akbank,67.4,2026-10-21
+11,ISCTR,İş Bankası (C),12.95,2026-10-21
+12,VAKBN,VakıfBank,32.58,2026-10-21
+13,HALKB,Halkbank,44.28,2026-10-21
+14,YKBNK,Yapı Kredi,36.36,2026-10-21
+15,EREGL,Ereğli Demir Çelik,36.36,2026-10-21
+16,FROTO,Ford Otosan,66.95,2026-10-21
+17,CCOLA,Coca-Cola Içecek,76.4,2026-10-21
+18,TCELL,Turkcell,95,2026-10-21
+19,SAHOL,Sabancı Holding,88.7,2026-10-21
+20,TTKOM,Türk Telekom,49.54,2026-10-21
+21,ISDMR,Iskenderun Demir ve Çelik,56.9,2026-10-21
+22,ASTOR,Astor Enerji,155.8,2026-10-21
+23,ENJSA,Enerjisa Enerji,115.3,2026-10-21
+24,TRALT,Turk Altin Isletmeleri,40.3,2026-10-21
+25,DOCO,DO & CO Aktiengesellschaft,11192.5,2026-10-21
+26,INVES,Investco Holding,650.5,2026-10-21
+27,ENERY,Enerya Enerji,13.39,2026-10-21
+28,GUBRF,Gübre Fabrikalari,355.25,2026-10-21
+29,TOASO,Tofaş,229.3,2026-10-21
+30,AHGAZ,Ahlatci Dogal Gaz Dagitim Enerji ve Yatirim,45.26,2026-10-21
+31,SISE,Şişecam,35.36,2026-10-21
+32,TAVHL,TAV Havalimanlari Holding,280.25,2026-10-21
+33,AEFES,Anadolu Efes Biracilik ve Malt Sanayii,16.9,2026-10-21
+34,RYGYO,Reysas Gayrimenkul Yatirim Ortakligi,49.6,2026-10-21
+35,OYAKC,OYAK Çimento Fabrikalari,19.22,2026-10-21
+36,BRSAN,Borusan Birlesik Boru Fabrikalari Sanayi ve Ticaret,659,2026-10-21
+37,TURSG,Türkiye Sigorta,4.43,2026-10-21
+38,SASA,Sasa Polyester Sanayi,1.67,2026-10-21
+39,TRGYO,Torunlar Gayrimenkul Yatirim Ortakligi,86.7,2026-10-21
+40,AKSEN,Aksa Enerji Üretim,69.65,2026-10-21
+41,PKENT,Petrokent Turizm,100.9,2026-10-21
+42,ZRGYO,Ziraat Gayrimenkul Yatirim Ortakligi,17.84,2026-10-21
+43,KENT,Kent Gida Maddeleri Sanayii ve Ticaret,248.9,2026-10-21
+44,MGROS,Migros Ticaret,455,2026-10-21
+45,MPARK,MLP Saglik Hizmetleri,402.75,2026-10-21
+46,KLNMA,Türkiye Kalkinma ve Yatirim Bankasi,7.4,2026-10-21
+47,AGHOL,AG Anadolu Grubu Holding,29.34,2026-10-21
+48,QNBFK,QNB Finansal Kiralama,34.98,2026-10-21
+49,EKGYO,Emlak Konut Gayrimenkul Yatirim Ortakligi,18.62,2026-10-21
+50,TKFEN,Tekfen Holding,175.7,2026-10-21
+51,PGSUS,Pegasus,129.5,2026-10-21
+52,AKFIS,Akfen Insaat Turizm ve Ticaret,16.33,2026-10-21
+53,RGYAS,Ronesans Gayrimenkul Yatirim,179.3,2026-10-21
+54,AYGAZ,Aygaz,269.25,2026-10-21
+55,DSTKF,Destek Finans Faktoring,177.2,2026-10-21
+56,KRDMB,Kardemir Karabük Demir Çelik Sanayi Ve Ticaret,44.26,2026-10-21
+57,TABGD,Tab Gida Sanayi ve Ticaret,198.2,2026-10-21
+58,ARCLK,Arçelik,74.6,2026-10-21
+59,RYSAS,Reysas Tasimacilik ve Lojistik Ticaret,24.96,2026-10-21
+60,PETKM,Petkim Petrokimya Holding,19.18,2026-10-21
+61,HEDEF,Hedef Holding,16.1,2026-10-21
+62,KRDMD,Kardemir Karabük Demir Çelik Sanayi Ve Ticaret,42.16,2026-10-21
+63,TRMET,TR Anadolu Metal Madencilik Isletmeleri,117.9,2026-10-21
+64,CVKMD,CVK Maden Isletmeleri Sanayi ve Ticaret,11.79,2026-10-21
+65,DOHOL,Dogan Sirketler Grubu Holding,17.31,2026-10-21
+66,ANSGR,Anadolu Anonim Türk Sigorta Sirketi,21.82,2026-10-21
+67,YGGYO,Yeni Gimat Gayrimenkul Yatirim Ortakligi,186.5,2026-10-21
+68,KRDMA,Kardemir Karabük Demir Çelik Sanayi Ve Ticaret,36.74,2026-10-21
+69,ALARK,Alarko Holding,103.4,2026-10-21
+70,ISMEN,Is Yatirim Menkul Degerler,28.04,2026-10-21
+71,ANHYT,Anadolu Hayat Emeklilik,95.8,2026-10-21
+72,AKSA,Aksa Akrilik Kimya Sanayii,10.11,2026-10-21
+73,GLRMK,Gulermak Aglr Sanayi Insaat ve Taahhut,119.5,2026-10-21
+74,AGESA,AgeSA Hayat ve Emeklilik,210.4,2026-10-21
+75,CIMSA,Çimsa Çimento Sanayi ve Ticaret,39.58,2026-10-21
+76,SELEC,Selçuk Ecza Deposu Ticaret ve Sanayi,60,2026-10-21
+77,TBORG,Türk Tuborg Bira ve Malt Sanayii,115.2,2026-10-21
+78,EFOR,Efor Yatirim Sanayi Ticaret,17.05,2026-10-21
+79,OTKAR,Otokar Otomotiv ve Savunma Sanayi,306.5,2026-10-21
+80,TTRAK,Türk Traktör ve Ziraat Makineleri,365.25,2026-10-21
+81,ECILC,"EIS Eczacibasi Ilaç, Sinai ve Finansal Yatirimlar Sanayi ve Ticaret",52.5,2026-10-21
+82,BRYAT,Borusan Yatirim ve Pazarlama,1285,2026-10-21
+83,KTLEV,Katilimevim Tasarruf Finansman,4.97,2026-10-21
+84,AKCNS,Akçansa Çimento Sanayi ve Ticaret,180,2026-10-21
+85,SOKM,Sok Marketler Ticaret,57.95,2026-10-21
+86,VEYAS,Turker Vangolu Enerji Yatirim,58.4,2026-10-21
+87,VERUS,Verusa Holding,470,2026-10-21
+88,GLYHO,Global Yatirim Holding,16.62,2026-10-21
+89,KLRHO,Kiler Holding,10.78,2026-10-21
+90,NUHCM,Nuh Çimento Sanayi,208.2,2026-10-21
+91,ARMGD,Armada Gida Ticaret Sanayi,117.9,2026-10-21
+92,CLEBI,Çelebi Hava Servisi,1243,2026-10-21
+93,DOAS,Dogus Otomotiv Servis ve Ticaret,133.2,2026-10-21
+94,ULKER,Ülker Bisküvi Sanayi,77.9,2026-10-21
+95,AKFYE,Akfen Yenilenebilir Enerji,3.96,2026-10-21
+96,KARCL,Kardemir Celik Sanayi,33.48,2026-10-21
+97,MAVI,Mavi Giyim Sanayi ve Ticaret,35.12,2026-10-21
+98,GRSEL,Gür-Sel Turizm Tasimacilik ve Servis Ticaret,265,2026-10-21
+99,BASGZ,Baskent Dogalgaz Dagitim Gayrimenkul Yatirim Ortakligi,37.28,2026-10-21
+100,TSKB,Türkiye Sinai Kalkinma Bankasi,9.29,2026-10-21
+101,EUPWR,Europower Enerji ve Otomasyon Teknolojileri Sanayi Ticaret,39.2,2026-10-21
+102,CRFSA,CarrefourSA Carrefour Sabanci Ticaret Merkezi,194.3,2026-10-21
+103,ADGYO,Adra Gayrimenkul Yatirim Ortakligi,42.08,2026-10-21
+104,OZATD,Özata Denizcilik Sanayi ve Ticaret,324.25,2026-10-21
+105,TRENJ,Ipek Dogal Enerji Kaynaklari Arastirma ve Üretim,85.55,2026-10-21
+106,AKSGY,Akis Gayrimenkul Yatirim Ortakligi,9.09,2026-10-21
+107,BRISA,Brisa Bridgestone Sabanci Lastik Sanayi ve Ticaret,69.15,2026-10-21
+108,ALBRK,Albaraka Türk Katilim Bankasi,8.39,2026-10-21
+109,BETAE,Beta Enerji ve Teknoloji,50.1,2026-10-21
+110,KLYPV,Kalyon Günes Teknolojileri Üretim,48.6,2026-10-21
+111,YEOTK,Yeo Teknoloji Enerji Ve Endustri,23.88,2026-10-21
+112,ECZYT,Eczacibasi Yatirim Holding Ortakligi,184.5,2026-10-21
+113,AVPGY,Avrupakent Gayrimenkul Yatirim Ortakligi,47.82,2026-10-21
+114,ARASE,Dogu Aras Enerji Yatirimlari,76.5,2026-10-21
+115,MOGAN,Mogan Enerji Yatirim Holding,7.79,2026-10-21
+116,QUICK,Quick Sigorta,39.32,2026-10-21
+117,PASEU,Pasifik Eurasia Lojistik Dis Ticaret,28.02,2026-10-21
+118,GENIL,Gen Ilac Ve Saglik Urunleri Sanayi Ve Ticaret,4.17,2026-10-21
+119,ARDYZ,Ard Grup Bilisim Teknolojileri,60.05,2026-10-21
+120,CMENT,Çimentas Izmir Çimento Fabrikasi Türk,215.1,2026-10-21
+121,PAHOL,Pasifik Holding,0.93,2026-10-21
+122,ISGYO,Is Gayrimenkul Yatirim Ortakligi,19.13,2026-10-21
+123,MAGEN,Margün Enerji Üretim Sanayi ve Ticaret,6.17,2026-10-21
+124,KCAER,Kocaer Celik Sanayi ve Ticaret,9.44,2026-10-21
+125,TCKRC,Kirac Galvaniz Telekominikasyon Metal Makine Insaat Elektrik Sanayi ve Ticaret,105.3,2026-10-21
+126,ENTRA,IC Enterra Yenilenebilir Enerji,4.38,2026-10-21
+127,MASFN,Masfen Enerji,31.78,2026-10-21
+128,RAYSG,Ray Sigorta,105.4,2026-10-21
+129,CITAS,Citlekci Magazacilik Gida,92.1,2026-10-21
+130,SARKY,Sarkuysan Elektrolitik Bakir Sanayi ve Ticaret,16.64,2026-10-21
+131,CWENE,CW Enerji Mühendislik Ticaret ve Sanayi,15.26,2026-10-21
+132,HEKTS,Hektas Ticaret,1.92,2026-10-21
+133,OZKGY,Ozak Gayrimenkul Yatirim Ortakligi,11.01,2026-10-21
+134,NTHOL,Net Holding,35.08,2026-10-21
+135,SSAAT,Saat ve Saat Sanayi ve Ticaret,23.84,2026-10-21
+136,AYDEM,Aydem Yenilenebilir Enerji,21.8,2026-10-21
+137,ORZAX,Orzaks Ilac Ve Kimya Sanayi Ticaret,62.4,2026-10-21
+138,EGPRO,Ege Profil Ticaret ve Sanayi,28.08,2026-10-21
+139,KONYA,Konya Çimento Sanayii,3072.5,2026-10-21
+140,DEVA,Deva Holding,74.15,2026-10-21
+141,HLGYO,Halk Gayrimenkul Yatirim Ortakligi,3.92,2026-10-21
+142,GMTAS,Gimat Magazacilik Sanayi ve Ticaret,48.92,2026-10-21
+143,GESAN,Girisim Elektrik Sanayi Taahhüt ve Ticaret,31.44,2026-10-21
+144,FENER,Fenerbahçe Futbol,2.25,2026-10-21
+145,CEMZY,Cem Zeytin,5.76,2026-10-21
+146,EKIM,EKIM TURIZM TICARET VE SANAYI,15.68,2026-10-21
+147,HRKET,Hareket Proje Tasimaciligi Ve Yuk Muhendisligi,8.08,2026-10-21
+148,SARAE,Sa-Ra Enerji Insaat Ticaret Ve Sanayi,28.96,2026-10-21
+149,EGEEN,Ege Endüstri ve Ticaret,4070,2026-10-21
+150,METEN,Metgun Enerji Yatirimlari,20.02,2026-10-21
+151,MRSHL,Marshall Boya Ve Vernik Sanayii,1129,2026-10-21
+152,LILAK,Lila Kagit Sanayi Ve Ticaret,20.98,2026-10-21
+153,EBEBK,Ebebek Magazacilik,76.95,2026-10-21
+154,BANVT,Banvit Bandirma Vitaminli Yem Sanayii,122.7,2026-10-21
+155,MIATK,MIA Teknoloji,23.82,2026-10-21
+156,ICBCT,ICBC Turkey Bank,13.6,2026-10-21
+157,LYDHO,Lydia Holding,32.94,2026-10-21
+158,BFREN,Bosch Fren Sistemleri Sanayi ve Ticaret,94.5,2026-10-21
+159,ALTNY,Altinay Savunma Teknolojileri,11.38,2026-10-21
+160,TERA,Tera Yatirim Menkul Degerler,16.2,2026-10-21
+161,BMSTL,Bms Birlesik Metal Sanayi ve Ticaret,37.78,2026-10-21
+162,LOGO,Logo Yazilim Sanayi ve Ticaret,119.2,2026-10-21
+163,SKBNK,Sekerbank,4.49,2026-10-21
+164,NETCD,Netcad Yazilim,81.45,2026-10-21
+165,ULUSE,Ulusoy Elektrik Imalat Taahhüt ve Ticaret,138,2026-10-21
+166,ECOGR,Ecogreen Enerji Holding,20.38,2026-10-21
+167,POLTK,Politeknik Metal Sanayi ve Ticaret,2905,2026-10-21
+168,ODINE,Odine Solutions Teknoloji Ticaret ve Sanayi,96.85,2026-10-21
+169,ISFIN,Is Finansal Kiralama,15.32,2026-10-21
+170,OBAMS,Oba Makarnacilik Sanayi ve Ticaret,3.61,2026-10-21
+171,LMKDC,Limak Dogu Anadolu Cimento Sanayi ve Ticaret,19.95,2026-10-21
+172,KORDS,Kordsa Teknik Tekstil,2.76,2026-10-21
+173,TRCAS,Turcas Holding,40.96,2026-10-21
+174,ASUZU,Anadolu Isuzu Otomotiv Sanayi ve Ticaret,40.02,2026-10-21
+175,PSGYO,Pasifik Gayrimenkul Yatirim Ortakligi,1.45,2026-10-21
+176,POLHO,Polisan Holding,13.06,2026-10-21
+177,SNGYO,Sinpas Gayrimenkul Yatirim Ortakligi,2.5,2026-10-21
+178,CANTE,Çan2 Termik,0.99,2026-10-21
+179,DMRGD,Dmr Unlu Mamuller Uretim Gida Toptan Perakende Ihracat,6.56,2026-10-21
+180,GWIND,Galata Wind Enerji,17.99,2026-10-21
+181,GEDIK,Gedik Yatirim Menkul Degerler,4.81,2026-10-21
+182,GSRAY,Galatasaray Sportif Sinai ve Ticari Yatirimlar,0.71,2026-10-21
+183,DOFRB,Dof Robotik Sanayi,60.85,2026-10-21
+184,MOBTL,Mobiltel Iletisim Hizmetleri Sanayi ve Ticaret,9.16,2026-10-21
+185,PAGYO,Panora Gayrimenkul Yatirim Ortakligi,107.8,2026-10-21
+186,KLKIM,Kalekim Kimyevi Maddeler Sanayi Ve Ticaret,19.95,2026-10-21
+187,TNZTP,Tapdi Oksijen Özel Saglik ve Egitim Hizmetleri Sanayi Ticaret,22.98,2026-10-21
+188,AKFGY,Akfen Gayrimenkul Yatirim Ortakligi,2.33,2026-10-21
+189,ALFAS,Alfa Solar Enerji Sanayi ve Ticaret,24.68,2026-10-21
+190,BTCIM,Batiçim Bati Anadolu Çimento Sanayii,1.63,2026-10-21
+191,HTTBT,Hitit Bilgisayar Hizmetleri,30.1,2026-10-21
+192,CELHA,Çelik Halat ve Tel Sanayii,23.34,2026-10-21
+193,DGGYO,Dogus Gayrimenkul Yatirim Ortakligi,26.96,2026-10-21
+194,TUKAS,Tukas Gida Sanayi ve Ticaret,1.96,2026-10-21
+195,TRHOL,Tera Finansal Yatirimlar Holding,292.5,2026-10-21
+196,SUNTK,Sun Tekstil Sanayi ve Ticaret,18.45,2026-10-21
+197,GARFA,Garanti Faktoring,21.92,2026-10-21
+198,INDES,Indeks Bilgisayar Sistemleri Mühendislik Sanayi ve Ticaret,11.52,2026-10-21
+199,SDTTR,SDT Uzay ve Savunma Teknolojileri,13.5,2026-10-21
+200,KLSER,Kaleseramik Canakkale Kalebodur Seramik Sanayi,16.7,2026-10-21
+201,EGGUB,Ege Gübre Sanayii,85.75,2026-10-21
+202,UFUK,UFUK Yatirim Yonetim ve Gayrimenkul,212.7,2026-10-21
+203,JANTS,Jantsa Jant Sanayi ve Ticaret,12.15,2026-10-21
+204,BALSU,Balsu Gida Sanayi ve Ticaret,7.53,2026-10-21
+205,IZMDC,Izmir Demir Çelik Sanayi,5.55,2026-10-21
+206,MCARD,Metropal Kurumsal Hizmetler,88.85,2026-10-21
+207,KGYO,Koray Gayrimenkul Yatirim Ortakligi,8.22,2026-10-21
+208,GEREL,Gersan Elektrik Ticaret ve Sanayi,22.06,2026-10-21
+209,IEYHO,Isiklar Enerji ve Yapi Holding,14.99,2026-10-21
+210,KAYSE,Kayseri Seker Fabrikasi,2.64,2026-10-21
+211,BAHKM,Bahadir Kimya Sanayi ve Ticaret,144,2026-10-21
+212,MEGMT,Mega Metal Sanayi ve Ticaret,3.07,2026-10-21
+213,ORGE,Orge Enerji Elektrik Taahhüt,19.35,2026-10-21
+214,SONME,Sönmez Filament Sentetik Iplik ve Elyaf Sanayi,106,2026-10-21
+215,AKGRT,Aksigorta,4.81,2026-10-21
+216,VAKFA,Vakif Faktoring,8.6,2026-10-21
+217,IZENR,IZDEMIR Enerji Elektrik Uretim,3.16,2026-10-21
+218,ZOREN,Zorlu Enerji Elektrik Üretim,1.52,2026-10-21
+219,AYCES,Altin Yunus Çesme Turistik Tesisler,306.25,2026-10-21
+220,BSOKE,Batisöke Söke Çimento Sanayii,4.81,2026-10-21
+221,OFSYM,Ofis Yem Gida Sanayi ve Ticaret,51.4,2026-10-21
+222,VAKKO,Vakko Tekstil ve Hazir Giyim Sanayi Isletmeleri,46.54,2026-10-21
+223,YYLGD,Yayla Agro Gida Sanayi ve Ticaret,6.83,2026-10-21
+224,EKDMR,Ekinciler Demir ve Celik Sanayi,23.06,2026-10-21
+225,KOTON,Koton Magazacilik Tekstil Sanayi ve Ticaret,8.91,2026-10-21
+226,LYDYE,Lydia Yesil Enerji Kaynaklari,3857.5,2026-10-21
+227,SMRTG,Smart Günes Enerjisi Teknolojileri Arastirma ve Gelistirme Üretim Sanayi ve Ticaret,3.99,2026-10-21
+228,OYYAT,Oyak Yatirim Menkul Degerler,24.16,2026-10-21
+229,INTET,Intetra Teknoloji Ve Bilisim Hizmetleri,44.98,2026-10-21
+230,PATEK,Pasifik Teknoloji,10.6,2026-10-21
+231,GRTHO,GRAINTURK Holding,57.15,2026-10-21
+232,AKHAN,Akhan Un Fabrikasi Ve Tarim Urunleri Gida Sanayi Ticaret,26.1,2026-10-21
+233,AKMGY,Akmerkez Gayrimenkul Yatirim Ortakligi,186.7,2026-10-21
+234,KSTUR,Kustur Kusadasi Turizm Endüstrisi,1637,2026-10-21
+235,TARKM,Tarkim Bitki Koruma Sanayi ve Ticaret,329,2026-10-21
+236,ODAS,Odas Elektrik Üretim Sanayi Ticaret,4.92,2026-10-21
+237,EMPAE,Empa Elektronik Sanayi Ve Ticaret,40.34,2026-10-21
+238,DAPGM,DAP Gayrimenkul Gelistirme,2.58,2026-10-21
+239,BOSSA,Bossa Ticaret ve Sanayi Isletmeleri,5.39,2026-10-21
+240,NTGAZ,Naturelgaz Sanayi ve Ticaret,9.84,2026-10-21
+241,SRVGY,Servet Gayrimenkul Yatirim Ortakligi,2.06,2026-10-21
+242,AYEN,Ayen Enerji,24.02,2026-10-21
+243,KARSN,Karsan Otomotiv Sanayii ve Ticaret,7.37,2026-10-21
+244,LIDER,LDR Turizm,8.14,2026-10-21
+245,BESLR,Besler Gida Ve Kimya Sanayi ve Ticaret,10,2026-10-21
+246,VKGYO,Vakif Gayrimenkul Yatirim Ortakligi,1.5,2026-10-21
+247,SNPAM,Sönmez Pamuklu Sanayii,16.75,2026-10-21
+248,GOZDE,Gozde Girisim Sermayesi Yatirim Ortakligi,16.97,2026-10-21
+249,RALYH,Ral Yatirim Holding,19.61,2026-10-21
+250,BUCIM,Bursa Cimento Fabrikasi,4.31,2026-10-21
+251,MEYSU,Meysu Gida Sanayi ve Ticaret,7.38,2026-10-21
+252,KLSYN,Koleksiyon Mobilya Sanayi,14.75,2026-10-21
+253,ADEL,Adel Kalemcilik Ticaret ve Sanayi,24.44,2026-10-21
+254,BASCM,Bastas Baskent Cimento Sanayi ve Ticaret,9.6,2026-10-21
+255,TEHOL,Tera Yatirim Teknoloji Holding,3.14,2026-10-21
+256,KMPUR,Kimteks Poliüretan Sanayi ve Ticaret,12.54,2026-10-21
+257,MAALT,Marmaris Altinyunus Turistik Tesisler,706,2026-10-21
+258,INGRM,Ingram Micro Bilisim Sistemleri,252.5,2026-10-21
+259,ALCAR,Alarko Carrier Sanayi ve Ticaret,562,2026-10-21
+260,ASGYO,Asce Gayrimenkul Yatirim Ortakligi,9.14,2026-10-21
+261,BIGEN,Birlesim Grup Enerji Yatirimlari,10.21,2026-10-21
+262,TMSN,Tümosan Motor ve Traktör Sanayi,51.15,2026-10-21
+263,BJKAS,Besiktas Futbol Yatirimlari Sanayi ve Ticaret,1.33,2026-10-21
+264,TSPOR,Trabzonspor Sportif Yatirim ve Futbol Isletmeciligi Ticaret,0.77,2026-10-21
+265,KOCMT,Koç Metalürji,2.29,2026-10-21
+266,KARTN,Kartonsan Karton Sanayi ve Ticaret,76.3,2026-10-21
+267,TUREX,Tureks Turizm Tasimacilik,5.27,2026-10-21
+268,FORTE,Forte Bilgi Iletisim Teknolojileri ve Savunma Sanayi,84.4,2026-10-21
+269,VESBE,Vestel Beyaz Esya Sanayi ve Ticaret,3.46,2026-10-21
+270,KLGYO,Kiler Gayrimenkul Yatirim Ortakligi,3.95,2026-10-21
+271,BOBET,Bogazici Beton Sanayi Ve Ticaret,14.42,2026-10-21
+272,FZLGY,Fuzul Gayrimenkul Yatirim Ortakligi,4.37,2026-10-21
+273,KBORU,Kuzey Boru,8.96,2026-10-21
+274,ARSAN,Arsan Holding,2.99,2026-10-21
+275,AAGYO,Agaoglu Avrasya Gayrimenkul Yatirim Ortakligi,7.5,2026-10-21
+276,VESTL,Vestel Elektronik Sanayi ve Ticaret,15.47,2026-10-21
+277,ESCAR,Escar Filo Kiralama Hizmetleri,10.35,2026-10-21
+278,ALGYO,Alarko Gayrimenkul Yatirim Ortakligi,2.55,2026-10-21
+279,BINHO,1000 Yatirimlar Holding,3.99,2026-10-21
+280,HATSN,Hat-San Gemi Insaa Bakim Onarim Deniz Nakliyat Sanayi ve Ticaret,23.02,2026-10-21
+281,AKENR,Akenerji Elektrik Üretim,6.97,2026-10-21
+282,VAKFN,Vakif Finansal Kiralama,0.84,2026-10-21
+283,PEKGY,Peker Gayrimenkul Yatirim Ortakligi,1,2026-10-21
+284,BIOEN,Biotrend Cevre ve Enerji Yatirimlari,9.95,2026-10-21
+285,KPEKS,Kapeks Kimya Sanayi,47.02,2026-10-21
+286,GLCVY,Gelecek Varlik Yönetimi,34.84,2026-10-21
+287,BLUME,Blume Metal Kimya,27.9,2026-10-21
+288,EUREN,Europen Endustri Insaat Sanayi ve Ticaret,2.31,2026-10-21
+289,OZYSR,Ozyasar Tel ve Galvanizleme Sanayi,11.35,2026-10-21
+290,ATAKP,Atakey Patates Gida Sanayi ve Ticaret,34.18,2026-10-21
+291,ALBTN,Albayrak Hazir Beton Sanayi Ve Ticaret,18.94,2026-10-21
+292,ULUUN,Ulusoy Un Sanayi ve Ticaret,6.3,2026-10-21
+293,KZBGY,Kizilbük Gayrimenkul Yatirim Ortakligi,1.16,2026-10-21
+294,DOKTA,Döktas Dökümcülük Ticaret ve Sanayi,14.26,2026-10-21
+295,BORSK,Bor Seker,4.8,2026-10-21
+296,PARSN,Parsan Makina Parçalari Sanayii,53.1,2026-10-21
+297,ATATP,ATP Yazilim ve Teknoloji,217.9,2026-10-21
+298,KRVGD,Kervan Gida Sanayi ve Ticaret,2.1,2026-10-21
+299,MERIT,Merit Turizm Yatirim ve Isletme,13.44,2026-10-21
+300,NETAS,Netas Telekomünikasyon,68.7,2026-10-21
+301,INVEO,Inveo Yatirim Holding,4.44,2026-10-21
+302,AFYON,Afyon Çimento Sanayi,10.91,2026-10-21
+303,GOKNR,Göknur Gida Maddeleri Enerji Imalat Ithalat Ihracat Ticaret ve Sanayi,12.48,2026-10-21
+304,TATEN,Tatlipinar Enerji Uretim,3.83,2026-10-21
+305,PRKAB,Türk Prysmian Kablo ve Sistemleri,19.9,2026-10-21
+306,GUNDG,Gundogdu Gida Sut Urunleri Sanayi ve Dis Ticaret,109.8,2026-10-21
+307,ENDAE,Enda Enerji Holding,10.39,2026-10-21
+308,YIGIT,Yigit Aku Malzemeleri Nakliyat Turizm Insaat Sanayi ve Ticaret,14.21,2026-10-21
+309,ZERGY,Zeray Gayrimenkul Yatirim Ortakligi,6.8,2026-10-21
+310,AHSGY,Ahes Gayrimenkul Yatirim Ortakligi,5.88,2026-10-21
+311,CATES,Çates Elektrik Üretim,25.66,2026-10-21
+312,MOPAS,Mopas Marketcilik Gida Sanayi ve Ticaret,15.49,2026-10-21
+313,METRO,Metro Ticari ve Mali Yatirimlar Holding,7.73,2026-10-21
+314,ISKPL,Isik Plastik Sanayi ve Dis Ticaret Pazarlama,2.7,2026-10-21
+315,GOLTS,Göltas Göller Bölgesi Cimento Sanayi ve Ticaret,224.4,2026-10-21
+316,KUYAS,Kuyas Yatirim,10.08,2026-10-21
+317,BIENY,Bien Yapi Urunleri Sanayi Turizm ve Ticaret,11,2026-10-21
+318,BARMA,Barem Ambalaj Sanayi ve Ticaret,4.91,2026-10-21
+319,DESA,Desa Deri Sanayi ve Ticaret,7.96,2026-10-21
+320,ESEN,Esenboga Elektrik Üretim,2.15,2026-10-21
+321,ALKA,Alkim Kagit Sanayi ve Ticaret,5.25,2026-10-21
+322,KAREL,Karel Elektronik Sanayi Ve Ticaret,4.78,2026-10-21
+323,CRDFA,Creditwest Faktoring,12.64,2026-10-21
+324,VSNMD,Visne Madencilik Üretim Sanayi ve Ticaret,20.88,2026-10-21
+325,ALKLC,Altinkilic Gida ve Sut Sanayi Ticaret,33.84,2026-10-21
+326,KOPOL,Koza Polyester Sanayi ve Ticaret,2.91,2026-10-21
+327,MNDTR,Mondi Tire Kutsan Kagit ve Ambalaj Sanayi,3.56,2026-10-21
+328,HOROZ,Horoz Lojistik Kargo Hizmetleri ve Ticaret,41.26,2026-10-21
+329,GENKM,Gentas Kimya Sanayi ve Ticaret Pazarlama,6.09,2026-10-21
+330,TKNKA,Teknika Plast Teknik Kalip Plastik Sanayi Ve Ticaret,29.32,2026-10-21
+331,BESTE,Best Brands Grup Enerji Yatirim,19.6,2026-10-21
+332,PLTUR,Platform Turizm Tasimacilik Gida Insaat Temizlik Hizmetleri Sanayi ve Ticaret,14.84,2026-10-21
+333,QUAGR,QUA Granite Hayal Yapi ve Ürünleri Sanayi Ticaret,1.38,2026-10-21
+334,MARMR,Marmara Holding,1.2,2026-10-21
+335,PENTA,Penta Teknoloji Urunleri Dagitim Ticaret,9.02,2026-10-21
+336,TATGD,Tat Gida Sanayi,14.43,2026-10-21
+337,YATAS,Yatas Yatak ve Yorgan Sanayi ve Ticaret,24.5,2026-10-21
+338,TEZOL,Europap Tezol Kagit Sanayi ve Ticaret,7.04,2026-10-21
+339,BINBN,Bin Ulasim ve Akilli Sehir Teknolojileri,31.34,2026-10-21
+340,PCILT,PC Iletisim ve Medya Hizmetleri Sanayi Ticaret,29.38,2026-10-21
+341,ISVEA,Isvea Seramik Ve Banyo Urunleri Sanayianonim Sirketi,13.56,2026-10-21
+342,GSDHO,GSD Holding,3.95,2026-10-21
+343,FONET,Fonet Bilgi Teknolojileri,3.67,2026-10-21
+344,ORMA,Orma Orman Mahsulleri Integre Sanayi Ve Ticaret,125.9,2026-10-21
+345,CEMTS,Çemtas Çelik Makina Sanayi ve Ticaret,6.75,2026-10-21
+346,OZSUB,Özsu Balik Üretim,28.1,2026-10-21
+347,TURGG,Türker Proje Gayrimenkul ve Yatirim Gelistirme,26,2026-10-21
+348,ATATR,Ata Turizm Isletmecilik Tasimacilik Madencilik Kuyumculuk Sanayi Ve Dis Ticaret,4.14,2026-10-21
+349,AYES,Ayes Celik Hasir Ve Cit Sanayi,6.51,2026-10-21
+350,CGCAM,Cagdas Cam Sanayi ve Ticaret,19.23,2026-10-21
+351,NETGL,Net Global Endustriyel Yatirimlar,10.1,2026-10-21
+352,SMRVA,Sumer Varlik Yonetim,5.24,2026-10-21
+353,GIPTA,Gipta Ofis Kirtasiye ve Promosyon Ürünleri Imalat Sanayi,23.68,2026-10-21
+354,EKOS,Ekos Teknoloji ve Elektrik,2.8,2026-10-21
+355,SANKO,Sanko Pazarlama Ithalat Ihracat,20.8,2026-10-21
+356,KRGYO,Körfez Gayrimenkul Yatirim Ortakligi,3.15,2026-10-21
+357,ALKIM,Alkim Alkali Kimya,10.38,2026-10-21
+358,TSGYO,TSKB Gayrimenkul Yatirim Ortakligi,4.78,2026-10-21
+359,DURDO,Duran Dogan Basim ve Ambalaj Sanayi,6.11,2026-10-21
+360,MHRGY,MHR Gayrimenkul Yatirim Ortakligi,1.67,2026-10-21
+361,FMIZP,Federal-Mogul Izmit Piston Ve Pim Üretim Tesisleri,212,2026-10-21
+362,FRMPL,Formul Plastik,18.82,2026-10-21
+363,EGEGY,Egeyapi Avrupa Gayrimenkul Yatirim Ortakligi,15.03,2026-10-21
+364,INTEM,Intema Insaat ve Tesisat Malzemeleri Yatirim ve Pazarlama,156.2,2026-10-21
+365,SURGY,Sur Tatil Evleri Gayrimenkul Yatirim Ortakligi,17.86,2026-10-21
+366,GOODY,Goodyear Lastikleri,1.94,2026-10-21
+367,KRONT,Kron Teknoloji,16.95,2026-10-21
+368,SOKE,Söke Degirmencilik Sanayi ve Ticaret,7.49,2026-10-21
+369,AZTEK,Aztek Teknoloji Urunleri Ticaret,2.88,2026-10-21
+370,PNSUT,Pinar Süt Mamülleri Sanayii,9.09,2026-10-21
+371,LIDFA,Lider Faktoring,1.73,2026-10-21
+372,ZGYO,Z Gayrimenkul Yatirim Ortakligi,13.3,2026-10-21
+373,IZFAS,Izmir Firça Sanayi ve Ticaret,15.88,2026-10-21
+374,KERVN,Kervansaray Yatirim Holding,4.76,2026-10-21
+375,MRGYO,Marti Gayrimenkul Yatirim Ortakligi,1.15,2026-10-21
+376,AGROT,Agrotech Yuksek Teknoloji Ve Yatirim,1.16,2026-10-21
+377,KONKA,Konya Kagit Sanayi ve Ticaret,7.1,2026-10-21
+378,UCAYM,Ucay Muhendislik Enerji Ve Iklimlendirme Teknolojileri,12.11,2026-10-21
+379,NATEN,Naturel Yenilenebilir Enerji Ticaret,3.28,2026-10-21
+380,LINK,Link Bilgisayar Sistemleri Yazilimi ve Donanimi Sanayi ve Ticaret,3.02,2026-10-21
+381,YBTAS,Yibitas Yozgat Isçi Birligi Insaat Malzemeleri Ticaret ve Sanayi,10,2026-10-21
+382,PETUN,Pinar Entegre Et ve Un Sanayii,8.83,2026-10-21
+383,ERCB,Erciyas Çelik Boru Sanayi,34.42,2026-10-21
+384,SAYAS,Say Yenilenebilir Enerji Ekipmanlari Sanayi ve Ticaret,34.6,2026-10-21
+385,DYOBY,DYO Boya Fabrikalari Sanayi ve Ticaret,8.85,2026-10-21
+386,ALCTL,Alcatel Lucent Teletas Telekomünikasyon,67.8,2026-10-21
+387,KUTPO,Kütahya Porselen Sanayi,65.2,2026-10-21
+388,ADESE,Adese Gayrimenkul Yatirim,0.52,2026-10-21
+389,GENTS,Gentas Dekoratif Yuzeyler Sanayi ve Ticaret,3.48,2026-10-21
+390,BKRGY,BAKIRCI GMYO,4.6,2026-10-21
+391,REEDR,Reeder Teknoloji Sanayi ve Ticaret,2.74,2026-10-21
+392,KATMR,Katmerciler Arac Üstü Ekipman Sanayi ve Ticaret,1.2,2026-10-21
+393,KUVVA,Kuvva Gida Ticaret Ve Sanayi Yatirimlari,83.2,2026-10-21
+394,SEGMN,Segmen Kardesler Gida Üretim ve Ambalaj Sanayi,14.36,2026-10-21
+395,YUNSA,Yünsa Yünlü Sanayi ve Ticaret,5.35,2026-10-21
+396,ESCOM,Escort Teknoloji Yatirim,3.63,2026-10-21
+397,DZGYO,Deniz Gayrimenkul Yatirim Ortakligi,6.36,2026-10-21
+398,KTSKR,Kutahya Seker Fabrikasi,53.85,2026-10-21
+399,ANELE,Anel Elektrik Proje Taahhüt ve Ticaret,9.37,2026-10-21
+400,BEGYO,Bati Ege Gayrimenkul Yatirim Ortakligi,3.04,2026-10-21
+401,TKNSA,Teknosa Iç ve Dis Ticaret,12.31,2026-10-21
+402,BAGFS,Bagfas Bandirma Gubre Fabrikalari,18.06,2026-10-21
+403,HURGZ,Hürriyet Gazetecilik ve Matbaacilik,4.07,2026-10-21
+404,LKMNH,"Lokman Hekim Engürüsag Saglik, Turizm, Egitim Hizmetleri ve Insaat Taahhüt",11.05,2026-10-21
+405,SVGYO,Savur Gayrimenkul Yatirim Ortakligi,2.19,2026-10-21
+406,IHLAS,Ihlas Holding,0.79,2026-10-21
+407,DARDL,Dardanel Onentas Gida Sanayi,1.01,2026-10-21
+408,MNDRS,Menderes Tekstil Sanayi ve Ticaret,8.44,2026-10-21
+409,MACKO,Mackolik Internet Hizmetleri Ticaret,23.42,2026-10-21
+410,VBTYZ,VBT Yazilim,19.7,2026-10-21
+411,SAFKR,Safkar Ege Sogutmacilik Klima Soguk Hava Tesisleri Ihracat Ithalat Sanayi ve Ticaret,11.5,2026-10-21
+412,BULGS,Bulls Girisim Sermayesi Yatirim Ortakligi,8.57,2026-10-21
+413,ELITE,Elite Naturel Organik Gida Sanayi ve Ticaret,17.55,2026-10-21
+414,EGEPO,Nasmed Özel Saglik Hizmetleri Ticaret,4.52,2026-10-21
+415,KIMMR,Ersan Alisveris Hizmetleri ve Gida Sanayi Ticaret,9.36,2026-10-21
+416,BRKVY,Birikim Varlik Yonetim,39.98,2026-10-21
+417,EKSUN,Eksun Gida Tarim Sanayi Ve Ticaret,3.73,2026-10-21
+418,IHAAS,Ihlas Haber Ajansi,13.71,2026-10-21
+419,PNLSN,Panelsan Cati Cephe Sistemleri Sanayi Ve Ticaret,29.56,2026-10-21
+420,DAGI,Dagi Giyim Sanayi ve Ticaret,5.52,2026-10-21
+421,A1CAP,A1 Capital Yatirim Menkul Degerler,3.25,2026-10-21
+422,SOHOE,Soho Giyim Ve Enerji,7.13,2026-10-21
+423,BVSAN,Bulbuloglu Vinc Sanayi ve Ticaret,57.8,2026-10-21
+424,ARTMS,Artemis Hali,30.3,2026-10-21
+425,SERNT,Seranit Granit Seramik Sanayi ve Ticaret,5.13,2026-10-21
+426,CEMAS,Çemas Döküm Sanayi,2.68,2026-10-21
+427,BORLS,Borlease Otomotiv,3.03,2026-10-21
+428,BURVA,Burçelik Vana Sanayi ve Ticaret,286,2026-10-21
+429,PINSU,Pinar Su ve Icecek Sanayi ve Ticaret,7.34,2026-10-21
+430,ISSEN,Isbir Sentetik Dokuma Sanayi,4.92,2026-10-21
+431,YAPRK,Yaprak Süt ve Besi Çiftlikleri Sanayi ve Ticaret,7,2026-10-21
+432,CMBTN,Cimbeton Hazir Beton ve Prefabrik Yapi Elemanlari Sanayi ve Ticaret,1176,2026-10-21
+433,NUGYO,Nurol Gayrimenkul Yatirim Ortakligi,6.2,2026-10-21
+434,SEGYO,Seker Gayrimenkul Yatirim Ortakligi,2.57,2026-10-21
+435,ATEKS,Akin Tekstil,81.3,2026-10-21
+436,ARFYE,ARF Bio Yenilenebilir Enerji Üretim,11.15,2026-10-21
+437,ONRYT,Onur Yuksek Teknoloji,8.1,2026-10-21
+438,ONCSM,Oncosem Onkolojik Sistemler Sanayi Ve Ticaret,85.3,2026-10-21
+439,OSMEN,Osmanli Yatirim Menkul Degerler,5.05,2026-10-21
+440,MARTI,Marti Otel Isletmeleri,1.34,2026-10-21
+441,LXGYO,Luxera Gayrimenkul Yatirim Ortakligi,6.08,2026-10-21
+442,ERBOS,Erbosan Erciyas Boru Sanayii ve Ticaret,99.8,2026-10-21
+443,KNFRT,Konfrut Tarim,7.49,2026-10-21
+444,DNISI,Dinamik Isi Makina Yalitim Malzemeleri Sanayi Ve Ticaret,3.8,2026-10-21
+445,BERA,Bera Holding,10.31,2026-10-21
+446,KONTR,Kontrolmatik Teknoloji Enerji Ve Muhendislik,1.5,2026-10-21
+447,BAKAB,Bak Ambalaj Sanayi ve Ticaret,26.6,2026-10-21
+448,BRLSM,Birlesim Mühendislik Isitma Sogutma Havalandirma Sanayi ve Ticaret,8.42,2026-10-21
+449,TGSAS,TGS Dis Ticaret,124.8,2026-10-21
+450,PRKME,Park Elektrik Üretim Madencilik Sanayi ve Ticaret,12.33,2026-10-21
+451,MERCN,Mercan Kimya Sanayi Ve Ticaret,9.46,2026-10-21
+452,ETILR,Etiler Gida Ve Ticari Yatirimlar Sanayi Ve Ticaret,7.14,2026-10-21
+453,MEDTR,Meditera Tibbi Malzeme Sanayi ve Ticaret,18.85,2026-10-21
+454,MARBL,Tureks Turunc Madencilik Ic ve Dis Ticaret,7.72,2026-10-21
+455,FRIGO,Frigo-Pak Gida Maddeleri Sanayi ve Ticaret,2.06,2026-10-21
+456,EDATA,E-Data Teknoloji Pazarlama,3.98,2026-10-21
+457,INFO,Info Yatirim Menkul Degerler,0.89,2026-10-21
+458,BYDNR,Baydoner Restoranlari,20.24,2026-10-21
+459,PKART,Plastikkart Akilli Kart Iletisim Sistemleri Sanayi ve Ticaret,74.6,2026-10-21
+460,AVGYO,Avrasya Gayrimenkul Yatirim Ortakligi,15.2,2026-10-21
+461,DGATE,Datagate Bilgisayar Malzemeleri Ticaret Anonim Sriketi,56.1,2026-10-21
+462,MSGYO,Mistral Gayrimenkul Yatirim Ortakligi,4.23,2026-10-21
+463,BIGCH,Büyük Sefler Gida Turizm Tekstil Danismanlik Organizasyon Egitim Sanayi Ve Ticaret,3.21,2026-10-21
+464,VANGD,Vanet Gida Sanayi Iç Ve Dis Ticaret,66.5,2026-10-21
+465,UNLU,ÜNLÜ Yatirim Holding,9.5,2026-10-21
+466,KRPLS,Koroplast Temizlik Ambalaj Ürünleri Sanayi ve Dis Ticaret,9.23,2026-10-21
+467,DCTTR,DCT Trading Dis Ticaret,4.13,2026-10-21
+468,TMPOL,Temapol Polimer Plastik ve Insaat Sanayi Ticaret,113.6,2026-10-21
+469,EGSER,Ege Seramik Sanayi ve Ticaret,2.23,2026-10-21
+470,SUWEN,Suwen Tekstil Sanayi Pazarlama,4.18,2026-10-21
+471,GOLDA,Golda Gida Sanayi ve Ticaret,6.4,2026-10-21
+472,MTRKS,Matriks Finansal Teknolojiler,16.28,2026-10-21
+473,SKYMD,Seker Yatirim Menkul Degerler,10.18,2026-10-21
+474,EDIP,Edip Gayrimenkul Yatirim Sanayi ve Ticaret,24.1,2026-10-21
+475,BURCE,Burçelik Bursa Çelik Döküm Sanayii,18.53,2026-10-21
+476,ISBIR,Isbir Holding,47.1,2026-10-21
+477,GSDDE,GSD Denizcilik Gayrimenkul Insaat Sanayi ve Ticaret,10.11,2026-10-21
+478,BALAT,Balatacilar Balatacilik Sanayi Ve Ticaret,54.5,2026-10-21
+479,BLCYT,Bilici Yatirim Sanayi ve Ticaret,1.51,2026-10-21
+480,DGNMO,Doganlar Mobilya Grubu Imalat Sanayi ve Ticaret,4.3,2026-10-21
+481,ANGEN,Anatolia Tani ve Biyoteknoloji Ürünleri Ar-Ge Sanayi Ticaret,6.66,2026-10-21
+482,KLMSN,Klimasan Klima Sanayi ve Ticaret,18.24,2026-10-21
+483,LUKSK,Lüks Kadife Ticaret ve Sanayi,50.7,2026-10-21
+484,USHOL,US Yatirim Holding,67.7,2026-10-21
+485,MAKIM,Makim Makina Teknolojileri Sanayi Ve Ticaret,12.56,2026-10-21
+486,KAPLM,Kaplamin Ambalaj Sanayi ve Ticaret,104.4,2026-10-21
+487,ENSRI,Ensari Sinai Yatirimlar,2.55,2026-10-21
+488,BEYAZ,Beyaz Filo Oto Kiralama,13.9,2026-10-21
+489,DERHL,Derluks Yatirim Holding,1.39,2026-10-21
+490,GATEG,Gate Group Teknoloji Medya Ve Siber Guvenlik Hizmetleri,121.2,2026-10-21
+491,SANFM,Sanifoam Endustri ve Tuketim Urunleri Sanayi Ticaret,3.68,2026-10-21
+492,MEKAG,Meka Global Makine Imalat Sanayi ve Ticaret,1.7,2026-10-21
+493,OZGYO,Ozderici Gayrimenkul Yatirim Ortakligi,1.36,2026-10-21
+494,BIZIM,Bizim Toptan Satis Magazalari,16.88,2026-10-21
+495,ARENA,Arena Bilgisayar Sanayi ve Ticaret,13.09,2026-10-21
+496,BIGTK,Big Medya Teknoloji,38.7,2026-10-21
+497,LRSHO,Loras Holding,1.7,2026-10-21
+498,PAPIL,Papilon Savunma Teknoloji ve Ticaret,6.28,2026-10-21
+499,MEPET,Mepet Metro Petrol ve Tesisleri Sanayi Ticaret,16.9,2026-10-21
+500,DITAS,Ditas BDY Yedek Parca Imalat and Teknik,7.52,2026-10-21
+501,INTEK,Innosa Teknoloji,159.7,2026-10-21
+502,IMASM,Imas Makina Sanayi,1.35,2026-10-21
+503,HDFGS,Hedef Girisim Sermayesi Yatirim Ortakligi,1.1,2026-10-21
+504,EYGYO,Eyg Gayrimenkul Yatirim Ortakligi,1.76,2026-10-21
+505,KRSTL,Kristal Kola ve Mesrubat Sanayi Ticaret,6.4,2026-10-21
+506,DURKN,Durukan Sekerleme Sanayi ve Ticaret,9.22,2026-10-21
+507,CUSAN,Cuhadaroglu Metal Sanayi ve Pazarlama,16.96,2026-10-21
+508,PENGD,Penguen Gida Sanayi,6.89,2026-10-21
+509,HKTM,Hidropar Hareket Kontrol Teknolojileri Merkezi Sanayi ve Ticaret,11.43,2026-10-21
+510,SNICA,Sanica Isi Sanayi,1.97,2026-10-21
+511,BNTAS,Bantas Bandirma Ambalaj Sanayi ve Ticaret,4.88,2026-10-21
+512,GZNMI,Gezinomi Seyahat Turizm Ticaret,18.08,2026-10-21
+513,MANAS,Manas Enerji Yonetimi Sanayi Ve Ticaret,3.41,2026-10-21
+514,PAMEL,Pamukova Yenilenebilir Elektrik Uretim,37.38,2026-10-21
+515,VERTU,Verusaturk Girisim Sermayesi Yatirim Ortakligi,22.5,2026-10-21
+516,HUNER,Hun Yenilenebilir Enerji Üretim,3.84,2026-10-21
+517,SUMAS,Sumas Suni Tahta ve Mobilya Sanayi,191.5,2026-10-21
+518,DERIM,Derimod Konfeksiyon Ayakkabi Deri Sanayi ve Ticaret,21.2,2026-10-21
+519,TLMAN,Trabzon Liman Isletmeciligi,54.3,2026-10-21
+520,DMSAS,Demisas Döküm Emaye Mamülleri Sanayi,5.66,2026-10-21
+521,MAKTK,Makina Takim Endüstrisi,5.66,2026-10-21
+522,CONSE,Consus Enerji Isletmeciligi ve Hizmetleri,1.46,2026-10-21
+523,YKSLN,Yukselen Celik,2.21,2026-10-21
+524,IHLGM,Ihlas Gayrimenkul Proje Gelistirme ve Ticaret,1.1,2026-10-21
+525,RNPOL,Rainbow Polikarbonat Sanayi Ticaret,1.83,2026-10-21
+526,GLBMD,Global Menkul Degerler,8.99,2026-10-21
+527,DOFER,Dofer Yapi Malzemeleri Sanayi ve Ticaret,19,2026-10-21
+528,AVHOL,Avrupa Yatirim Holding,28.2,2026-10-21
+529,RUZYE,Ruzy Madencilik ve Enerji Yatirimlari Sanayi ve Ticaret,3.8,2026-10-21
+530,SELVA,Selva Gida Sanayi,0.98,2026-10-21
+531,FORMT,Formet Metal ve Cam Sanayi,0.9,2026-10-21
+532,RTALB,RTA Laboratuvarlari Biyolojik Urunler Ilac ve Makine Sanayi Ticaret,2.04,2026-10-21
+533,KFEIN,Kafein Yazilim Hizmetleri Ticaret,5.13,2026-10-21
+534,RUBNS,Rubenis Tekstil Sanayi Ticaret,12.21,2026-10-21
+535,TEKTU,Tek-Art Insaat Ticaret Turizm Sanayi ve Yatirimlar,3.32,2026-10-21
+536,YYAPI,Yesil Yapi Endüstrisi,0.57,2026-10-21
+537,ISYAT,Is Yatirim Ortakligi,5.87,2026-10-21
+538,USAK,Usak Seramik Sanayi,0.38,2026-10-21
+539,EPLAS,Egeplast Ege Plastik Ticaret ve Sanayi,4.83,2026-10-21
+540,DENGE,Denge Yatirim Holding,1.52,2026-10-21
+541,OBASE,Obase Bilgisayar ve Danismanlik Hizmetleri Ticaret,20.08,2026-10-21
+542,GLRYH,Güler Yatirim Holding,1.51,2026-10-21
+543,VRGYO,Vera Konsept Gayrimenkul Yatirim Ortakligi,1.1,2026-10-21
+544,EMKEL,Emek Elektrik Endustrisi,5.91,2026-10-21
+545,ISGSY,Is Girisim Sermayesi Yatirim Ortakligi,11.85,2026-10-21
+546,A1YEN,A1 Yenilenebilir Enerji Üretim,1.45,2026-10-21
+547,GEDZA,Gediz Ambalaj Sanayi ve Ticaret,18.8,2026-10-21
+548,MERKO,Merko Gida Sanayi ve Ticaret,1.02,2026-10-21
+549,SKTAS,Söktas Tekstil Sanayi Ve Ticaret,1.73,2026-10-21
+550,ACSEL,Aciselsan Acipayam Selüloz Sanayi ve Ticaret,79.95,2026-10-21
+551,NIBAS,Nigbas Nigde Beton Sanayi Ve Ticaret,2.64,2026-10-21
+552,AKSUE,Aksu Enerji ve Ticaret,12.87,2026-10-21
+553,OSTIM,Ostim Endüstriyel Yatirimlar ve Isletme,1.06,2026-10-21
+554,BMSCH,Bms Celik Hasir Sanayi Ve Ticaret,8.4,2026-10-21
+555,CEOEM,Ceo Event Medya,19.03,2026-10-21
+556,FADE,Fade Gida Yatirim Sanayi Ticaret,9.98,2026-10-21
+557,PRZMA,Prizma Pres Matbaacilik Yayincilik Sanayi ve Ticaret,10.81,2026-10-21
+558,ALVES,Alves Kablo Sanayi ve Ticaret,0.52,2026-10-21
+559,TRILC,Turk Ilac Ve Serum Sanayi,0.79,2026-10-21
+560,EUHOL,Euro Yatirim Holding,5.43,2026-10-21
+561,TUCLK,Tugçelik Alüminyum Ve Metal Mamulleri Sanayi Ve Ticaret,2.25,2026-10-21
+562,EMNIS,Eminis Ambalaj Sanayi ve Ticaret,129.3,2026-10-21
+563,ZEDUR,Zedur Enerji Elektrik Üretim,4.56,2026-10-21
+564,BRKO,Birko Birlesik Koyunlulular Mensucat Ticaret ve Sanayi,5.4,2026-10-21
+565,BAYRK,Bayrak EBT Taban Sanayi ve Ticaret,3,2026-10-21
+566,SEKUR,Sekuro Plastik Ambalaj Sanayi,3.85,2026-10-21
+567,SKYLP,Skyalp Finansal Teknolojiler ve Danismanlik,75.45,2026-10-21
+568,PRDGS,Pardus Girisim Sermayesi Yatirim Ortakligi,3.57,2026-10-21
+569,KRTEK,Karsu Tekstil Sanayii ve Ticaret,5.03,2026-10-21
+570,IHGZT,Ihlas Gazetecilik,0.84,2026-10-21
+571,ETYAT,Euro Trend Yatirim Ortakligi,11.13,2026-10-21
+572,OTTO,Otto Holding,87.35,2026-10-21
+573,ARZUM,Arzum Elektrikli Ev Aletleri Sanayi ve Ticaret,1.1,2026-10-21
+574,SODSN,Sodas Sodyum Sanayii,5.47,2026-10-21
+575,SEKFK,Seker Finansal Kiralama,3.24,2026-10-21
+576,DUNYH,Dünya Holding,17.51,2026-10-21
+577,OZRDN,Özerden Ambalaj Sanayi,8.73,2026-10-21
+578,AVOD,A.V.O.D Kurutulmus Gida ve Tarim Ürünleri Sanayi Ticaret,2.37,2026-10-21
+579,DESPC,Despec Bilgisayar Pazarlama ve Ticaret,25.56,2026-10-21
+580,ATSYH,Atlantis Yatirim Holding,70.5,2026-10-21
+581,ERSU,Ersu Meyve ve Gida Sanayii,15.34,2026-10-21
+582,DOGUB,Dogusan Boru Sanayii ve Ticaret,14.1,2026-10-21
+583,YAYLA,Yayla Enerji Üretim Turizm ve Insaat Ticaret,10.83,2026-10-21
+584,OYAYO,Oyak Yatirim Ortakligi,26.8,2026-10-21
+585,HUBVC,Hub Girisim Sermayesi Yatirim Ortakligi,1.92,2026-10-21
+586,EUKYO,Euro Kapital Yatirim Ortakligi,8.9,2026-10-21
+587,IHEVA,Ihlas Ev Aletleri Imalat Sanayi ve Ticaret,1.52,2026-10-21
+588,COSMO,Cosmos Yatirim Holding,76.7,2026-10-21
+589,VKFYO,Vakif Menkul Kiymet Yatirim Ortakligi,17.66,2026-10-21
+590,OYLUM,Oylum Sinai Yatirimlar,6.22,2026-10-21
+591,VKING,Viking Kagit ve Selüloz,12.46,2026-10-21
+592,YESIL,Yesil Yatirim Holding,0.8,2026-10-21
+593,SILVR,Silverline Endustri ve Ticaret,1.47,2026-10-21
+594,ORCAY,Orçay Ortaköy Çay Sanayi ve Ticaret,2.13,2026-10-21
+595,YONGA,Yonga Mobilya Sanayi ve Ticaret,30.06,2026-10-21
+596,SEYKM,Seyitler Kimya Sanayi,2.52,2026-10-21
+597,BRKSN,Berkosan Yalitim Ve Tecrit Maddeleri Üretim Ve Ticaret,5.33,2026-10-21
+598,PSDTC,Pergamon Status Dis Ticaret,66.1,2026-10-21
+599,BRMEN,Birlik Mensucat Ticaret ve Sanayi Isletmesi,5.4,2026-10-21
+600,IZINV,Iz Yatirim Holding,27.24,2026-10-21
+601,SANEL,San-el Mühendislik Elektrik Taahhüt Sanayi ve Ticaret,23.36,2026-10-21
+602,IHYAY,Ihlas Yayin Holding,0.92,2026-10-21
+603,HATEK,Hateks Hatay Tekstil Isletmeleri,6.61,2026-10-21
+604,MZHLD,Mazhar Zorlu Holding,3.69,2026-10-21
+605,SMART,Smartiks Yazilim,12.1,2026-10-21
+606,ICUGS,ICU Girisim Sermayesi Yatirim Ortakligi,1.1,2026-10-21
+607,SAMAT,Saray Matbaacilik Kagitçilik kirtasiyecilik Ticaret Ve Sanayi,3.38,2026-10-21
+608,TDGYO,Trend Gayrimenkul Yatirim Ortakligi,5.44,2026-10-21
+609,AKYHO,Akdeniz Yatirim Holding,1.47,2026-10-21
+610,EKIZ,Ekiz Kimya Sanayi ve Ticaret,39.16,2026-10-21
+611,RODRG,Rodrigo Tekstil Sanayi ve Ticaret,12.09,2026-10-21
+612,ATAGY,Ata Gayrimenkul Yatirim Ortakligi,7.21,2026-10-21
+613,AVTUR,Avrasya Petrol ve Turistik Tesisler Yatirimlar,7.73,2026-10-21
+614,MTRYO,Metro Yatirim Ortakligi,7.73,2026-10-21
+615,ULAS,Ulaslar Turizm Enerji Tarim Gida ve Insaat Yatirimlari,12.1,2026-10-21
+616,ATLAS,Atlas Menkul Kiymetler Yatirim Ortakligi,4.79,2026-10-21
+617,IDGYO,Idealist Gayrimenkul Yatirim Ortakligi,1.91,2026-10-21
+618,GRNYO,Garanti Yatirim Ortakligi,7.49,2026-10-21
+619,MEGAP,Mega Polietilen Köpük Sanayi ve Ticaret,0.97,2026-10-21
+620,EUYO,Euro Menkul Kiymet Yatirim Ortakligi,3.1,2026-10-21
+621,CASA,Casa Emtia Petrol Kimyevi ve Turevleri San. Tic.,35.38,2026-10-21
+622,DIRIT,Diriteks Dirilis Tekstil Sanayi ve Ticaret,13.82,2026-10-21
+623,MMCAS,MMC Sanayi Ve Ticari Yatirimlar,9,2026-10-21
+624,FLAP,Flap Kongre Toplanti Hizmetleri Otomotiv ve Turizm,10.2,2026-10-21
+625,AGYO,Atakule Gayrimenkul Yatirim Ortakligi,6.21,2026-10-21
+626,KZGYO,Kuzugrup Gayrimenkul Yatirim Ortakligi,17.69,2026-10-21
+627,ULUFA,Ulusal Faktoring,1.59,2026-10-21

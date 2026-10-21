@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     # Arka planda fiyat yenileme aralığı. CoinGecko verisi ~10-20 sn'de bir güncellendiği için
     # daha kısası fayda getirmez ve ücretsiz API sınırına (dakikada ~30 istek) yaklaştırır.
     price_cache_seconds: int = 10
+    # BIST hisseleri (~630) bundan seyrek çekilir: veri Yahoo'da ~16 dk gecikmeli, 32 isteği her
+    # 10 sn'de atmak yeni bilgi getirmez ve Yahoo'nun istek sınırına takılma riskini artırır.
+    stock_refresh_seconds: int = 60
     cors_origins: list[str] = ["http://localhost:5500", "http://127.0.0.1:5500"]
 
 
