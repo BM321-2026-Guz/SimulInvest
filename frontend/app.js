@@ -136,49 +136,118 @@ async function loadAssets() {
   }
 }
 
-function renderMarket() {
-  const selected = $("#trade-symbol").value;
+// Türkçe karakterlere duyarsız arama: "turkiye" de "Türkiye"yi, "isbank" da "İş Bank"ı bulsun.
+const TR_ASCII = { ç: "c", ğ: "g", ı: "i", i̇: "i", ö: "o", ş: "s", ü: "u" };
+function searchKey(text) {
+  return text.toLocaleLowerCase("tr").replace(/[çğıöşü]|i̇/g, (ch) => TR_ASCII[ch] ?? ch);
+}
+
+// Çok varlığı olan gruplar (BIST, ~630 hisse) aranır ve sayfalanır.
+const PAGE_SIZE = 25;
+const market = { query: "", page: 0 };
+
+// Kart iskeleti (başlık, arama kutusu, sayfa düğmeleri) bir kez kurulur; 5 sn'lik yenilemede
+// sadece tablo satırları değişir, böylece aramaya yazarken kutu odağını kaybetmez.
+function ensureMarketShell() {
+  if ($("#market-groups").dataset.ready) return;
   $("#market-groups").innerHTML = GROUPS.map((g) => {
-    const assets = state.assets.filter((a) => a.type === g.type);
-    if (!assets.length) return "";
-    const rows = assets
-      .map(
-        (a) => `<tr data-symbol="${a.symbol}" class="${a.symbol === selected ? "selected" : ""}">
-          <td><span class="sym">${a.symbol}</span></td>
-          <td>${escapeHtml(a.name)}</td>
-          <td class="num">${tl.format(a.price)}</td>
-        </tr>`
-      )
-      .join("");
-    return `<div class="card market-group">
-      <div class="card-head"><h2>${dot(g.type)}${g.title}</h2><span class="muted">${assets.length} varlık</span></div>
+    const big = g.type === "STOCK";
+    return `<div class="card market-group" data-type="${g.type}" hidden>
+      <div class="card-head">
+        <h2>${dot(g.type)}${g.title}</h2>
+        <span class="muted" id="count-${g.type}"></span>
+      </div>
+      ${big ? `<input type="search" id="market-search" class="market-search"
+                 placeholder="Hisse ara: sembol ya da şirket adı" aria-label="Hisse ara">` : ""}
       <div class="table-wrap">
         <table>
           <thead><tr><th>Sembol</th><th>Ad</th><th class="num">Fiyat</th></tr></thead>
-          <tbody>${rows}</tbody>
+          <tbody id="rows-${g.type}"></tbody>
         </table>
       </div>
+      ${big ? `<div class="pager" id="pager">
+                 <button class="btn ghost small" type="button" data-step="-1">‹ Önceki</button>
+                 <span class="muted" id="pager-label"></span>
+                 <button class="btn ghost small" type="button" data-step="1">Sonraki ›</button>
+               </div>` : ""}
     </div>`;
   }).join("");
+  $("#market-groups").dataset.ready = "1";
+  $("#market-search").addEventListener("input", (e) => {
+    market.query = e.target.value;
+    market.page = 0;
+    renderMarket();
+  });
+  $("#pager").addEventListener("click", (e) => {
+    const step = Number(e.target.closest("button")?.dataset.step || 0);
+    if (!step) return;
+    market.page += step;
+    renderMarket();
+  });
 }
 
+function renderMarket() {
+  ensureMarketShell();
+  const selected = selectedAsset()?.symbol;
+  for (const g of GROUPS) {
+    const all = state.assets.filter((a) => a.type === g.type);
+    const card = document.querySelector(`.market-group[data-type="${g.type}"]`);
+    card.hidden = !all.length;
+    let shown = all;
+    if (g.type === "STOCK") {
+      const q = searchKey(market.query.trim());
+      const matches = q
+        ? all.filter((a) => searchKey(a.symbol).includes(q) || searchKey(a.name).includes(q))
+        : all;
+      const pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
+      market.page = Math.min(Math.max(market.page, 0), pages - 1);
+      shown = matches.slice(market.page * PAGE_SIZE, (market.page + 1) * PAGE_SIZE);
+      $(`#count-${g.type}`).textContent = q
+        ? `${matches.length} / ${all.length} hisse`
+        : `${all.length} hisse`;
+      $("#pager-label").textContent = `Sayfa ${market.page + 1} / ${pages}`;
+      $("#pager").hidden = pages < 2;
+      $('#pager [data-step="-1"]').disabled = market.page === 0;
+      $('#pager [data-step="1"]').disabled = market.page >= pages - 1;
+    } else {
+      $(`#count-${g.type}`).textContent = `${all.length} varlık`;
+    }
+    $(`#rows-${g.type}`).innerHTML =
+      shown
+        .map(
+          (a) => `<tr data-symbol="${a.symbol}" class="${a.symbol === selected ? "selected" : ""}">
+            <td><span class="sym">${a.symbol}</span></td>
+            <td>${escapeHtml(a.name)}</td>
+            <td class="num">${tl.format(a.price)}</td>
+          </tr>`
+        )
+        .join("") || `<tr><td colspan="3" class="empty">"${escapeHtml(market.query)}" ile eşleşen hisse yok.</td></tr>`;
+  }
+}
+
+// Al-sat kutusunun öneri listesi; ~630 seçenek her 5 sn'de yeniden yazılmasın diye sadece
+// varlık listesi değişince güncellenir.
+let symbolListKey = "";
 function renderSymbolOptions() {
-  const select = $("#trade-symbol");
-  const current = select.value;
-  select.innerHTML = GROUPS.map((g) => {
-    const options = state.assets
-      .filter((a) => a.type === g.type)
-      .map((a) => `<option value="${a.symbol}">${a.symbol} · ${escapeHtml(a.name)}</option>`)
+  const key = state.assets.map((a) => a.symbol).join(",");
+  if (key !== symbolListKey) {
+    symbolListKey = key;
+    $("#symbol-list").innerHTML = state.assets
+      .map((a) => `<option value="${a.symbol}">${escapeHtml(a.name)} · ${TYPE_LABELS[a.type]}</option>`)
       .join("");
-    return options ? `<optgroup label="${g.title}">${options}</optgroup>` : "";
-  }).join("");
-  if (current) select.value = current;
+  }
   updateEstimate();
 }
 
 // ---------- al / sat ----------
+// Kutuya "thyao" ya da "THYAO · Türk Hava Yolları" yazılsa da sembol olarak okunur.
+function typedSymbol() {
+  return $("#trade-symbol").value.split("·")[0].trim().toUpperCase(); // semboller ASCII; "tr" yerelinde i → İ olurdu
+}
+
 function selectedAsset() {
-  return state.assets.find((a) => a.symbol === $("#trade-symbol").value);
+  const symbol = typedSymbol();
+  return state.assets.find((a) => a.symbol === symbol);
 }
 
 function selectedSide() {
@@ -233,10 +302,17 @@ async function handleTrade(event) {
   event.preventDefault();
   const form = new FormData(event.target);
   const body = {
-    symbol: form.get("symbol"),
+    symbol: typedSymbol(),
     side: form.get("side"),
     quantity: Number(form.get("quantity")),
   };
+  if (!selectedAsset()) {
+    const msg = $("#trade-msg");
+    msg.textContent = `"${$("#trade-symbol").value}" listede yok. Öneri listesinden bir varlık seç.`;
+    msg.className = "msg fail";
+    msg.hidden = false;
+    return;
+  }
   const msg = $("#trade-msg");
   const button = $("#trade-submit");
   button.disabled = true;
@@ -346,7 +422,7 @@ document.querySelectorAll("#auth-view .tab").forEach((t) =>
 $("#auth-form").addEventListener("submit", handleAuth);
 $("#logout").addEventListener("click", logout);
 $("#trade-form").addEventListener("submit", handleTrade);
-$("#trade-symbol").addEventListener("change", () => {
+$("#trade-symbol").addEventListener("input", () => {
   updateEstimate();
   renderMarket();
 });

@@ -383,3 +383,14 @@ body.no-scroll { overflow: hidden; }
   .detail-news { min-height: 200px; }
   .chart .axis { font-size: 20px; } /* SVG telefonda küçülüyor; etiketler okunur kalsın */
 }
+/* ---------- Tüm BIST hisseleri: arama ve sayfalama (issue #56) ---------- */
+.market-search { margin: 0 0 10px; }
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.pager .btn:disabled { opacity: 0.4; cursor: default; }

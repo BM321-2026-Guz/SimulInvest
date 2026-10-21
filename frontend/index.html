@@ -63,7 +63,9 @@
         <h2>Al / Sat</h2>
         <form id="trade-form">
           <label>Varlık
-            <select name="symbol" id="trade-symbol" required></select>
+            <input name="symbol" id="trade-symbol" list="symbol-list" autocomplete="off" required
+                   placeholder="Sembol ya da ad yaz (ör. THYAO)">
+            <datalist id="symbol-list"></datalist>
           </label>
           <div class="side-toggle">
             <input type="radio" name="side" id="side-buy" value="BUY" checked>
