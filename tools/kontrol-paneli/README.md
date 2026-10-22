@@ -36,17 +36,14 @@ dosyaya sağ tıkla → **Aç**. Çalıştırma izni yoksa: `chmod +x "SimulInve
 - **Ayarlar:** Klasörler, Python yolu ve portlar "Yollar" bölümünden değiştirilebilir.
   `simulinvest_kontrol_ayarlar.json` dosyasına kaydedilir; kişiye özel olduğu için git'e girmez.
 
-## Arayüz klasörü (geçici)
+## Arayüz klasörü
 
-Demo arayüz (#25) `develop`'a birleşene kadar `frontend/` klasörü ayrı bir dalda duruyor.
-O zamana kadar arayüzü ayrı bir klasöre çıkarmak gerekir (repo klasöründe):
+Arayüz, reponun `frontend/` klasöründen sunulur; ek bir şey yapmaya gerek yoktur. Repoda
+`frontend/` olduğu sürece "Arayüz (UI) klasörü" ayarı devre dışı görünür.
 
-```bash
-git worktree add ../SimulInvest-ui feature/eren-demo-ui
-```
-
-Panel bu klasörü (`../SimulInvest-ui`) kendisi bulur. Arayüz repo içinde varsa "Arayüz (UI)
-klasörü" ayarı otomatik olarak devre dışı kalır, ayrı klasöre gerek kalmaz.
+Bu ayar sadece arayüzü başka bir klasörden çalıştırmak isteyenler içindir (örneğin henüz
+birleşmemiş bir arayüz dalını ayrı bir klasörde denemek). Repoda `frontend/` yoksa panel bu
+ayardaki klasörü kullanır.
 
 ## Gereksinimler
 

@@ -231,7 +231,7 @@ def load_config():
         pass
     if not cfg["repo"]:
         cfg["repo"] = str(REPO_ROOT) if REPO_ROOT else guess_folder("SimulInvest")
-    # Arayüz develop'a birleşene kadar ayrı bir klasörde (worktree) duruyor; sonra gerekmez.
+    # Arayüz normalde repodaki frontend/ klasöründedir; yoksa yanındaki bir klasör aranır.
     if not cfg["ui_repo"] and not repo_has_frontend(cfg["repo"]):
         cfg["ui_repo"] = guess_folder("SimulInvest-ui")
     return cfg
@@ -606,8 +606,8 @@ class App(tk.Tk):
             return self._fail(f"Backend bulunamadı: {backend}\nRepo klasörünü kontrol et "
                               "veya GitHub Desktop'ta backend olan bir dal seç.")
         if not (frontend / "index.html").exists():
-            return self._fail(f"Arayüz bulunamadı: {frontend}\nUI repo klasörünü kontrol et. "
-                              "Gerekirse: git worktree add ../SimulInvest-ui feature/eren-demo-ui")
+            return self._fail(f"Arayüz bulunamadı: {frontend}\nGitHub Desktop'ta develop dalını seçip "
+                              "Pull yap ya da 'Yollar' bölümünden arayüz klasörünü seç.")
 
         # 1) Python ortamı
         if not py.exists():
