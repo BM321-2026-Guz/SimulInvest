@@ -1,0 +1,3 @@
+# Mac betiği LF, Windows betiği CRLF satır sonuyla kalmalı.
+*.command text eol=lf
+*.bat     text eol=crlf

@@ -59,7 +59,20 @@ Gerçek banka/kredi kartı entegrasyonu, limit/stop-loss emirleri ve WebSocket i
 
 ## Kurulum ve Çalıştırma
 
-Backend'i yerelde çalıştırmak için [`backend/README.md`](backend/README.md) dosyasına bakın.
+### Geliştirme: Kontrol Paneli (tek tık)
+
+Python 3.13 kurulu olması yeterli. Panel ilk açılışta Python ortamını, paketleri ve `.env` dosyasını kendisi hazırlar; backend'i ve arayüzü başlatıp tarayıcıyı açar.
+
+| Sistem | Çift tıkla |
+|---|---|
+| Windows | `tools/kontrol-paneli/SimulInvest Kontrol.bat` |
+| macOS | `tools/kontrol-paneli/SimulInvest Kontrol.command` |
+
+Ayrıntılar: [`tools/kontrol-paneli/README.md`](tools/kontrol-paneli/README.md)
+
+Backend'i panel olmadan, terminalden çalıştırmak için [`backend/README.md`](backend/README.md) dosyasına bakın.
+
+### Final: Docker
 
 Proje Docker ile tek komutla çalışacak şekilde hazırlanacaktır (hedef: 12. hafta).
 
