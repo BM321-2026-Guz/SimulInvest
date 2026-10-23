@@ -55,3 +55,12 @@ Kaynak: https://owasp.org/Top10/
 - **Etki:** Kullanıcı oturumunun (JWT token) çalınması.
 - **Çözüm:** Token'ları `HttpOnly` ve `SameSite` bayrakları aktif olan çerezlerde (cookies) saklamak.
 - **Durum:** Açık
+
+## 4. SAST (Statik Kod Analizi) Değerlendirmesi
+
+Projeye uygulanan statik güvenlik taraması (SAST) sonuçları ve OWASP 2025 standartlarına göre yapılan değerlendirme aşağıdadır:
+
+- **B3 (Timing Attack):** Giriş ve kayıt servislerinde yanıt sürelerindeki milisaniyelik farklar, e-postanın veritabanında var olup olmadığını açık etmektedir. Sabit zamanlı karşılaştırma algoritmaları veya yapay gecikme (padding) eklenmelidir.
+- **B5 (Proxy / IP Tespiti):** `login_limiter.py` servisi doğrudan istemci IP'sine dayanmaktadır. Uygulama Docker veya Reverse Proxy arkasında çalıştığında tüm istekler tek IP olarak görülebilir. `X-Forwarded-For` başlığı güvenli bir şekilde işlenmelidir.
+- **B6 (XSS & LocalStorage):** JWT token'larının browser `localStorage` alanında saklanması, muhtemel bir XSS zafiyetinde token'ın çalınmasına yol açabilir. Çözüm olarak token'ların `HttpOnly`, `Secure` ve `SameSite` çerezlerinde saklanması önerilir.
+- **B10 (Parola Politikası):** Parola uzunluğunun 8-72 karakter arasında kısıtlanması temel düzeyde yeterli olsa da, OWASP A07 standartlarına uyum için parola karmaşıklığı ve sızdırılmış parola (pwned passwords) kontrolleri entegre edilmelidir.
